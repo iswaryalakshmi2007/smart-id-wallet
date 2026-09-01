@@ -1,0 +1,387 @@
+/* ================================
+   SMART ID WALLET - INDEX PAGE
+   ================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f7fb;
+    color: #172033;
+    min-height: 100vh;
+}
+
+/* Main Container */
+
+.app {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px 24px 110px;
+}
+
+/* ================================
+   HEADER
+   ================================ */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.header h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #102a43;
+    margin-bottom: 6px;
+}
+
+.header p {
+    color: #718096;
+    font-size: 15px;
+}
+
+.profile-icon {
+    width: 48px;
+    height: 48px;
+    background: #e8f0ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
+}
+
+/* ================================
+   WELCOME CARD
+   ================================ */
+
+.welcome-card {
+    background: linear-gradient(135deg, #0b2a4a, #164e7a);
+    color: white;
+    border-radius: 24px;
+    padding: 30px;
+    margin-bottom: 22px;
+    box-shadow: 0 12px 30px rgba(11, 42, 74, 0.18);
+}
+
+.welcome-card h2 {
+    font-size: 25px;
+    margin-bottom: 12px;
+}
+
+.welcome-card p {
+    color: #d9e8f5;
+    margin-bottom: 8px;
+}
+
+/* ================================
+   BALANCE CARD
+   ================================ */
+
+.balance-card {
+    background: white;
+    border-radius: 22px;
+    padding: 28px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+    border: 1px solid #e6edf5;
+}
+
+.balance-label {
+    color: #718096;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.balance {
+    font-size: 38px;
+    font-weight: 750;
+    color: #0b2a4a;
+}
+
+.wallet-subtitle {
+    color: #8a94a6;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+/* ================================
+   QUICK ACTIONS
+   ================================ */
+
+.section-title {
+    font-size: 21px;
+    margin-bottom: 15px;
+    color: #172033;
+}
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.action-btn {
+    border: none;
+    background: white;
+    border-radius: 18px;
+    padding: 22px 15px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    color: #183b56;
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e7edf4;
+    transition: 0.2s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.10);
+}
+
+.action-icon {
+    display: block;
+    font-size: 25px;
+    margin-bottom: 9px;
+}
+
+/* Scan & Pay */
+
+.scan-btn {
+    background: #0b2a4a;
+    color: white;
+}
+
+.scan-btn:hover {
+    background: #123d61;
+}
+
+/* ================================
+   LOW BALANCE
+   ================================ */
+
+.low-balance {
+    background: #fff8df;
+    border: 1px solid #f4df9b;
+    border-radius: 18px;
+    padding: 18px 20px;
+    margin-bottom: 30px;
+}
+
+.low-balance strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.low-balance span {
+    color: #75652c;
+    font-size: 14px;
+}
+
+/* ================================
+   TRANSACTIONS
+   ================================ */
+
+.transactions {
+    background: white;
+    border-radius: 22px;
+    padding: 24px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e6edf5;
+}
+
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.transaction {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 17px 5px;
+    border-bottom: 1px solid #edf1f5;
+}
+
+.transaction:last-child {
+    border-bottom: none;
+}
+
+.transaction-left {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.transaction-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #edf4fb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+}
+
+.transaction-name {
+    font-weight: 600;
+    color: #203247;
+}
+
+.transaction-date {
+    font-size: 12px;
+    color: #8a94a6;
+    margin-top: 4px;
+}
+
+.transaction-amount {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.debit {
+    color: #d64545;
+}
+
+.credit {
+    color: #159447;
+}
+
+/* ================================
+   BOTTOM NAVIGATION
+   ================================ */
+
+.bottom-nav {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1100px;
+    background: rgba(255, 255, 255, 0.97);
+    border-top: 1px solid #e4e9ef;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 10px;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.06);
+}
+
+.nav-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #6b778c;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 18px;
+    border-radius: 12px;
+}
+
+.nav-btn:hover {
+    background: #edf4fb;
+    color: #0b2a4a;
+}
+
+.nav-icon {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+/* ================================
+   RESPONSIVE - TABLET
+   ================================ */
+
+@media (max-width: 800px) {
+
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .header h1 {
+        font-size: 26px;
+    }
+
+    .balance {
+        font-size: 34px;
+    }
+}
+
+/* ================================
+   RESPONSIVE - MOBILE
+   ================================ */
+
+@media (max-width: 500px) {
+
+    .app {
+        padding: 20px 15px 100px;
+    }
+
+    .header h1 {
+        font-size: 23px;
+    }
+
+    .welcome-card {
+        padding: 23px;
+        border-radius: 20px;
+    }
+
+    .welcome-card h2 {
+        font-size: 21px;
+    }
+
+    .balance-card {
+        padding: 22px;
+    }
+
+    .balance {
+        font-size: 32px;
+    }
+
+    .quick-actions {
+        gap: 12px;
+    }
+
+    .action-btn {
+        padding: 18px 10px;
+        border-radius: 16px;
+    }
+
+    .transactions {
+        padding: 18px;
+        border-radius: 18px;
+    }
+
+    .transaction {
+        padding: 15px 0;
+    }
+
+    .transaction-icon {
+        width: 38px;
+        height: 38px;
+    }
+
+    .transaction-name {
+        font-size: 14px;
+    }
+
+    .transaction-amount {
+        font-size: 14px;
+    }
+
+    .nav-btn {
+        padding: 7px 10px;
+        font-size: 11px;
+    }
+}

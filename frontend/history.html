@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Transaction History | Smart ID Wallet</title>
+
+    <link
+        rel="stylesheet"
+        href="css/history.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="history-page">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="history-header">
+
+        <button
+            class="back-button"
+            onclick="goBack()"
+        >
+            ←
+        </button>
+
+
+        <div class="header-title">
+
+            <h1>
+                Transaction History
+            </h1>
+
+            <p>
+                Your complete wallet activity
+            </p>
+
+        </div>
+
+
+        <div class="header-icon">
+            📜
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================
+         STUDENT INFO
+    ========================================== -->
+
+    <section class="student-card">
+
+        <div class="student-avatar">
+            👤
+        </div>
+
+
+        <div>
+
+            <h3 id="studentName">
+                Student
+            </h3>
+
+            <p id="studentId">
+                --
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         BALANCE
+    ========================================== -->
+
+    <section class="balance-card">
+
+        <div>
+
+            <span>
+                Available Balance
+            </span>
+
+            <h2 id="balance">
+                ₹0.00
+            </h2>
+
+        </div>
+
+
+        <div class="wallet-icon">
+            💳
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         FILTER
+    ========================================== -->
+
+    <section class="filter-section">
+
+        <button
+            class="filter-btn active"
+            onclick="filterTransactions('ALL', this)"
+        >
+            All
+        </button>
+
+
+        <button
+            class="filter-btn"
+            onclick="filterTransactions('CREDIT', this)"
+        >
+            Money Added
+        </button>
+
+
+        <button
+            class="filter-btn"
+            onclick="filterTransactions('DEBIT', this)"
+        >
+            Payments
+        </button>
+
+    </section>
+
+
+
+    <!-- =========================================
+         TRANSACTION COUNT
+    ========================================== -->
+
+    <div class="transaction-summary">
+
+        <h2>
+            Transactions
+        </h2>
+
+        <span id="transactionCount">
+            0 transactions
+        </span>
+
+    </div>
+
+
+
+    <!-- =========================================
+         TRANSACTIONS
+    ========================================== -->
+
+    <main id="transactionList">
+
+        <div class="loading">
+
+            <div class="loading-icon">
+                ⏳
+            </div>
+
+            <p>
+                Loading transactions...
+            </p>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =========================================
+         EMPTY STATE
+    ========================================== -->
+
+    <div
+        id="emptyState"
+        class="empty-state"
+        style="display:none;"
+    >
+
+        <div class="empty-icon">
+            💳
+        </div>
+
+        <h2>
+            No Transactions
+        </h2>
+
+        <p>
+            Your wallet transactions
+            will appear here.
+        </p>
+
+    </div>
+
+
+
+    <!-- =========================================
+         BOTTOM NAVIGATION
+    ========================================== -->
+
+    <nav class="bottom-nav">
+
+        <button onclick="goHome()">
+
+            <span>🏠</span>
+
+            <small>
+                Home
+            </small>
+
+        </button>
+
+
+        <button class="nav-active">
+
+            <span>📜</span>
+
+            <small>
+                History
+            </small>
+
+        </button>
+
+
+        <button onclick="viewID()">
+
+            <span>🪪</span>
+
+            <small>
+                My ID
+            </small>
+
+        </button>
+
+
+        <button onclick="profile()">
+
+            <span>👤</span>
+
+            <small>
+                Profile
+            </small>
+
+        </button>
+
+    </nav>
+
+
+</div>
+
+
+<script src="js/history.js"></script>
+
+</body>
+
+</html>

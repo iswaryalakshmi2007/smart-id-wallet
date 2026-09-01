@@ -1,0 +1,362 @@
+/* =========================================
+   SMART ID WALLET - DASHBOARD
+   ========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #172033;
+    min-height: 100vh;
+}
+
+/* =========================================
+   APP CONTAINER
+   ========================================= */
+
+.app {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    margin: auto;
+    background: #ffffff;
+    position: relative;
+    padding-bottom: 90px;
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.header {
+    background: linear-gradient(135deg, #071d3a, #0d3b66);
+    color: white;
+    padding: 24px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0 0 24px 24px;
+}
+
+.header h1 {
+    font-size: 23px;
+    margin-bottom: 6px;
+}
+
+.header p {
+    font-size: 13px;
+    opacity: 0.75;
+}
+
+.profile-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+}
+
+/* =========================================
+   STUDENT INFO
+   ========================================= */
+
+.student-info {
+    padding: 20px 20px 10px;
+}
+
+.student-info p {
+    margin: 8px 0;
+    color: #5d6878;
+    font-size: 14px;
+}
+
+.student-info strong {
+    color: #172033;
+}
+
+/* =========================================
+   WALLET CARD
+   ========================================= */
+
+.wallet-card {
+    margin: 15px 20px;
+    padding: 25px;
+    background: linear-gradient(135deg, #061b36, #0b3158);
+    color: white;
+    border-radius: 24px;
+    box-shadow: 0 12px 30px rgba(7, 29, 58, 0.20);
+}
+
+.wallet-label {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-bottom: 8px;
+}
+
+.balance {
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.wallet-name {
+    margin-top: 20px;
+    font-size: 13px;
+    opacity: 0.65;
+}
+
+/* =========================================
+   QUICK ACTIONS
+   ========================================= */
+
+.section-title {
+    padding: 10px 20px 14px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 20px;
+}
+
+.action-btn {
+    border: none;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 20px 12px;
+    min-height: 105px;
+    cursor: pointer;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+    border: 1px solid #edf0f5;
+    transition: 0.2s ease;
+    color: #102746;
+}
+
+.action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+}
+
+.action-btn:active {
+    transform: scale(0.97);
+}
+
+.action-icon {
+    display: block;
+    font-size: 27px;
+    margin-bottom: 9px;
+}
+
+.action-text {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Scan & Pay */
+
+.scan-btn {
+    background: #092646;
+    color: white;
+}
+
+/* Add Money */
+
+.add-btn {
+    background: #eef7ff;
+}
+
+/* My ID */
+
+.id-btn {
+    background: #f4f1ff;
+}
+
+/* Transactions */
+
+.transaction-btn {
+    background: #fff7e9;
+}
+
+/* =========================================
+   LOW BALANCE ALERT
+   ========================================= */
+
+.balance-alert {
+    margin: 20px;
+    padding: 16px;
+    border-radius: 17px;
+    background: #fff8df;
+    border: 1px solid #f4df91;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.alert-icon {
+    font-size: 24px;
+}
+
+.alert-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.alert-text {
+    font-size: 12px;
+    color: #6f6650;
+}
+
+/* =========================================
+   RECENT TRANSACTIONS
+   ========================================= */
+
+.transactions-section {
+    padding: 5px 20px;
+}
+
+.transaction-list {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #edf0f5;
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 16px;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    font-size: 19px;
+}
+
+.transaction-details {
+    flex: 1;
+}
+
+.transaction-name {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.transaction-date {
+    font-size: 11px;
+    color: #8a94a3;
+}
+
+.transaction-amount {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.credit {
+    color: #0a9b45;
+}
+
+.debit {
+    color: #d62f2f;
+}
+
+/* =========================================
+   NO TRANSACTIONS
+   ========================================= */
+
+.no-transactions {
+    text-align: center;
+    padding: 35px 20px;
+    color: #8993a2;
+    font-size: 14px;
+}
+
+/* =========================================
+   BOTTOM NAVIGATION
+   ========================================= */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    height: 72px;
+    background: rgba(255,255,255,0.97);
+    border-top: 1px solid #e9edf3;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    z-index: 100;
+}
+
+.nav-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #7b8491;
+    font-size: 11px;
+    transition: 0.2s;
+}
+
+.nav-btn:hover {
+    color: #092646;
+}
+
+.nav-icon {
+    display: block;
+    font-size: 21px;
+    margin-bottom: 4px;
+}
+
+.nav-active {
+    color: #092646;
+    font-weight: 700;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (min-width: 600px) {
+
+    body {
+        padding: 30px 0;
+    }
+
+    .app {
+        min-height: calc(100vh - 60px);
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 15px 50px rgba(0,0,0,0.12);
+    }
+
+    .bottom-nav {
+        bottom: 30px;
+        border-radius: 0 0 28px 28px;
+    }
+}

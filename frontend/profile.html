@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Profile | Smart ID Wallet</title>
+
+    <link
+        rel="stylesheet"
+        href="css/profile.css"
+    >
+
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="header">
+
+        <button
+            class="back-btn"
+            onclick="goBack()"
+        >
+            ←
+        </button>
+
+        <div class="header-title">
+
+            <h1>Profile</h1>
+
+            <p>Smart ID Wallet</p>
+
+        </div>
+
+        <div class="profile-header-icon">
+            👤
+        </div>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="profile-container">
+
+
+        <!-- ================= PROFILE CARD ================= -->
+
+        <section class="profile-card">
+
+            <div class="profile-avatar">
+                👤
+            </div>
+
+            <h2 id="studentName">
+                Student
+            </h2>
+
+            <p id="studentId">
+                Student ID
+            </p>
+
+        </section>
+
+
+        <!-- ================= EDIT PROFILE ================= -->
+
+        <section class="edit-card">
+
+            <div class="section-title">
+
+                <span>✏️</span>
+
+                <h3>Edit Profile</h3>
+
+            </div>
+
+
+            <!-- NAME -->
+
+            <div class="input-group">
+
+                <label for="name">
+                    Student Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter student name"
+                >
+
+            </div>
+
+
+            <!-- STUDENT ID -->
+
+            <div class="input-group">
+
+                <label for="studentIdInput">
+                    Student ID
+                </label>
+
+                <input
+                    type="text"
+                    id="studentIdInput"
+                    placeholder="Example: 25EC060"
+                    maxlength="7"
+                >
+
+            </div>
+
+
+            <!-- DEPARTMENT -->
+
+            <div class="input-group">
+
+                <label for="departmentInput">
+                    Department
+                </label>
+
+                <input
+                    type="text"
+                    id="departmentInput"
+                    placeholder="Enter department"
+                >
+
+            </div>
+
+
+            <!-- ACADEMIC YEAR -->
+
+            <div class="input-group">
+
+                <label for="academicYearInput">
+                    Academic Year
+                </label>
+
+                <input
+                    type="text"
+                    id="academicYearInput"
+                    placeholder="Example: 2025-2029"
+                >
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="input-group">
+
+                <label for="emailInput">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="emailInput"
+                    placeholder="Enter email"
+                >
+
+            </div>
+
+
+            <!-- SAVE -->
+
+            <button
+                class="save-btn"
+                onclick="saveProfile()"
+            >
+
+                💾
+                Save Profile
+
+            </button>
+
+        </section>
+
+
+        <!-- ================= STUDENT DETAILS ================= -->
+
+        <section class="details-card">
+
+            <div class="section-title">
+
+                <span>🎓</span>
+
+                <h3>Student Details</h3>
+
+            </div>
+
+
+            <!-- NAME -->
+
+            <div class="detail-row">
+
+                <div class="detail-icon">
+                    👤
+                </div>
+
+                <div class="detail-info">
+
+                    <span class="label">
+                        Full Name
+                    </span>
+
+                    <strong id="detailName">
+                        Loading...
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- STUDENT ID -->
+
+            <div class="detail-row">
+
+                <div class="detail-icon">
+                    🪪
+                </div>
+
+                <div class="detail-info">
+
+                    <span class="label">
+                        Student ID
+                    </span>
+
+                    <strong id="detailStudentId">
+                        Loading...
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- DEPARTMENT -->
+
+            <div class="detail-row">
+
+                <div class="detail-icon">
+                    🎓
+                </div>
+
+                <div class="detail-info">
+
+                    <span class="label">
+                        Department
+                    </span>
+
+                    <strong id="department">
+                        Loading...
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACADEMIC YEAR -->
+
+            <div class="detail-row">
+
+                <div class="detail-icon">
+                    📚
+                </div>
+
+                <div class="detail-info">
+
+                    <span class="label">
+                        Academic Year
+                    </span>
+
+                    <strong id="academicYear">
+                        Loading...
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="detail-row">
+
+                <div class="detail-icon">
+                    📧
+                </div>
+
+                <div class="detail-info">
+
+                    <span class="label">
+                        Email
+                    </span>
+
+                    <strong id="email">
+                        Loading...
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= WALLET ================= -->
+
+        <section class="wallet-card">
+
+            <div class="wallet-left">
+
+                <div class="wallet-icon">
+                    💰
+                </div>
+
+                <div>
+
+                    <span>
+                        Available Balance
+                    </span>
+
+                    <h2 id="balance">
+                        ₹0.00
+                    </h2>
+
+                </div>
+
+            </div>
+
+            <div class="wallet-arrow">
+                →
+            </div>
+
+        </section>
+
+
+        <!-- ================= PASSWORD ================= -->
+
+        <section class="options-card">
+
+            <button
+                class="option-btn"
+                onclick="changePassword()"
+            >
+
+                <div class="option-icon">
+                    🔐
+                </div>
+
+                <div class="option-text">
+
+                    <strong>
+                        Change Password
+                    </strong>
+
+                    <span>
+                        Update your wallet password
+                    </span>
+
+                </div>
+
+                <span class="arrow">
+                    ›
+                </span>
+
+            </button>
+
+        </section>
+
+
+        <!-- ================= LOGOUT ================= -->
+
+        <button
+            class="logout-btn"
+            onclick="logout()"
+        >
+
+            🚪
+            <span>Logout</span>
+
+        </button>
+
+
+        <!-- ================= BACK ================= -->
+
+        <button
+            class="dashboard-btn"
+            onclick="goBack()"
+        >
+
+            ← Back to Dashboard
+
+        </button>
+
+    </main>
+
+</div>
+
+
+<script src="js/profile.js"></script>
+
+</body>
+
+</html>

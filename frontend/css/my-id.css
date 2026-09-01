@@ -1,0 +1,192 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f7fb;
+    color: #172033;
+}
+
+.id-page {
+    max-width: 480px;
+    min-height: 100vh;
+    margin: auto;
+    background: white;
+    padding-bottom: 30px;
+}
+
+.id-header {
+    background: linear-gradient(135deg, #092646, #164e7a);
+    color: white;
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-radius: 0 0 24px 24px;
+}
+
+.id-header h1 {
+    font-size: 23px;
+}
+
+.id-header p {
+    font-size: 13px;
+    opacity: 0.75;
+    margin-top: 4px;
+}
+
+.back-btn {
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 23px;
+    cursor: pointer;
+}
+
+main {
+    padding: 25px 20px;
+}
+
+.college-id-card {
+    background: linear-gradient(145deg, #0a2948, #17608c);
+    color: white;
+    border-radius: 24px;
+    padding: 22px;
+    box-shadow: 0 15px 35px rgba(9,38,70,0.22);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.college-name {
+    font-weight: 800;
+    font-size: 17px;
+}
+
+.card-title {
+    font-size: 10px;
+    opacity: 0.7;
+    margin-top: 4px;
+    letter-spacing: 1px;
+}
+
+.card-logo {
+    font-size: 30px;
+}
+
+.student-section {
+    display: flex;
+    gap: 18px;
+    padding: 25px 0;
+}
+
+.student-photo {
+    width: 85px;
+    height: 100px;
+    background: white;
+    color: #64748b;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+}
+
+.student-details {
+    flex: 1;
+}
+
+.student-details h2 {
+    font-size: 20px;
+    margin-bottom: 13px;
+}
+
+.student-details p {
+    font-size: 12px;
+    margin: 7px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.student-details strong {
+    font-size: 9px;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
+.barcode {
+    background: white;
+    color: #172033;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+}
+
+.barcode-lines {
+    font-size: 22px;
+    letter-spacing: 2px;
+    overflow: hidden;
+}
+
+.barcode span {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.id-info {
+    margin-top: 22px;
+}
+
+.info-box {
+    display: flex;
+    gap: 14px;
+    padding: 17px;
+    margin-bottom: 12px;
+    background: #f7f9fc;
+    border: 1px solid #e8edf3;
+    border-radius: 16px;
+}
+
+.info-box > span {
+    font-size: 23px;
+}
+
+.info-box strong {
+    font-size: 14px;
+}
+
+.info-box p {
+    font-size: 12px;
+    color: #7b8798;
+    margin-top: 4px;
+}
+
+.dashboard-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    background: #092646;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.dashboard-btn:hover {
+    background: #164e7a;
+}

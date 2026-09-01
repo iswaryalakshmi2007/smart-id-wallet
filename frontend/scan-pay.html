@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Scan & Pay | Smart ID Wallet</title>
+
+    <link
+        rel="stylesheet"
+        href="css/scan-pay.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+
+    <header class="header">
+
+        <button
+            class="back-btn"
+            onclick="goBack()"
+            aria-label="Back"
+        >
+            ←
+        </button>
+
+
+        <div class="header-title">
+
+            <h1>Scan & Pay</h1>
+
+            <p>
+                Smart ID Wallet
+            </p>
+
+        </div>
+
+
+        <div class="header-icon">
+            💳
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================
+         MAIN CONTENT
+    ====================================== -->
+
+    <main class="payment-container">
+
+
+        <!-- =================================
+             PAYMENT CARD
+        ================================== -->
+
+        <section class="payment-card">
+
+
+            <!-- TOP -->
+
+            <div class="payment-top">
+
+                <div class="scan-icon">
+                    📷
+                </div>
+
+
+                <h2>
+                    Make a Payment
+                </h2>
+
+
+                <p>
+                    Enter the amount and select
+                    where you want to pay
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================
+                 AMOUNT
+            ================================== -->
+
+            <div class="section">
+
+                <label for="amount">
+                    Payment Amount
+                </label>
+
+
+                <div class="amount-input">
+
+                    <span>₹</span>
+
+
+                    <input
+                        type="number"
+                        id="amount"
+                        placeholder="0.00"
+                        min="1"
+                        step="0.01"
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <small class="input-hint">
+                    Enter the amount you want to pay
+                </small>
+
+            </div>
+
+
+
+            <!-- =================================
+                 CATEGORY
+            ================================== -->
+
+            <div class="section">
+
+                <label>
+                    Select Category
+                </label>
+
+
+                <div class="category-grid">
+
+
+                    <!-- CANTEEN -->
+
+                    <button
+                        type="button"
+                        class="category-btn"
+                        data-category="Canteen"
+                        onclick="selectCategory(this)"
+                    >
+
+                        <span class="category-icon">
+                            🍽️
+                        </span>
+
+                        <span>
+                            Canteen
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- STATIONERY -->
+
+                    <button
+                        type="button"
+                        class="category-btn"
+                        data-category="Stationery"
+                        onclick="selectCategory(this)"
+                    >
+
+                        <span class="category-icon">
+                            📚
+                        </span>
+
+                        <span>
+                            Stationery
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- PRINTING -->
+
+                    <button
+                        type="button"
+                        class="category-btn"
+                        data-category="Printing"
+                        onclick="selectCategory(this)"
+                    >
+
+                        <span class="category-icon">
+                            🖨️
+                        </span>
+
+                        <span>
+                            Printing
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- OTHER -->
+
+                    <button
+                        type="button"
+                        class="category-btn"
+                        data-category="Other"
+                        onclick="selectCategory(this)"
+                    >
+
+                        <span class="category-icon">
+                            📦
+                        </span>
+
+                        <span>
+                            Other
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <small
+                    id="categoryHint"
+                    class="input-hint"
+                >
+                    Select a payment category
+                </small>
+
+            </div>
+
+
+
+            <!-- =================================
+                 DESCRIPTION
+            ================================== -->
+
+            <div class="section">
+
+                <label for="description">
+                    Description
+                </label>
+
+
+                <input
+                    type="text"
+                    id="description"
+                    class="description-input"
+                    placeholder="Example: Lunch, Notebook, Printout..."
+                    maxlength="100"
+                    autocomplete="off"
+                >
+
+
+                <small class="input-hint">
+                    Add a short description for your transaction
+                </small>
+
+            </div>
+
+
+
+            <!-- =================================
+                 ERROR MESSAGE
+            ================================== -->
+
+            <div
+                id="errorMessage"
+                class="error-message"
+            >
+            </div>
+
+
+
+            <!-- =================================
+                 PAY BUTTON
+            ================================== -->
+
+            <button
+                type="button"
+                class="pay-btn"
+                id="payButton"
+                onclick="payNow()"
+            >
+
+                <span>
+                    💳
+                </span>
+
+                <span>
+                    Pay Now
+                </span>
+
+            </button>
+
+
+
+            <!-- SECURITY -->
+
+            <div class="security-note">
+
+                🔒 Secure Wallet Payment
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================
+             BALANCE CARD
+        ================================== -->
+
+        <section class="balance-card">
+
+
+            <div class="balance-info">
+
+                <span>
+                    Available Balance
+                </span>
+
+
+                <h2 id="balance">
+                    ₹0.00
+                </h2>
+
+            </div>
+
+
+            <div class="wallet-icon">
+                💰
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================
+             QUICK INFO
+        ================================== -->
+
+        <div class="payment-info">
+
+            <div class="info-item">
+
+                <span>
+                    🔐
+                </span>
+
+                <p>
+                    Secure payment
+                </p>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>
+                    ⚡
+                </span>
+
+                <p>
+                    Instant balance update
+                </p>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>
+                    📜
+                </span>
+
+                <p>
+                    Saved in history
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- =====================================
+         SUCCESS MODAL
+    ====================================== -->
+
+    <div
+        id="successModal"
+        class="modal"
+    >
+
+
+        <div class="modal-content">
+
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+
+            <h2>
+                Payment Successful!
+            </h2>
+
+
+            <p
+                id="successDetails"
+            >
+            </p>
+
+
+            <button
+                type="button"
+                onclick="closeSuccess()"
+                class="done-btn"
+            >
+                Done
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+
+<!-- =====================================
+     JAVASCRIPT
+====================================== -->
+
+<script src="js/scan-pay.js"></script>
+
+
+</body>
+
+</html>

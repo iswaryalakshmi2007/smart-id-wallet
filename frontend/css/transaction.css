@@ -1,0 +1,728 @@
+/* =========================================
+   SMART ID WALLET
+   TRANSACTIONS PAGE
+   ========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background: #f4f7fb;
+
+    color: #172033;
+
+    min-height: 100vh;
+}
+
+
+/* =========================================
+   PAGE
+   ========================================= */
+
+.transactions-page {
+
+    width: 100%;
+
+    max-width: 520px;
+
+    min-height: 100vh;
+
+    margin: auto;
+
+    background: #ffffff;
+
+    padding-bottom: 30px;
+
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.transactions-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 22px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #092646,
+            #17608c
+        );
+
+    border-radius:
+        0 0 24px 24px;
+
+}
+
+
+.back-btn {
+
+    width: 43px;
+
+    height: 43px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.15);
+
+    color: white;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+.back-btn:hover {
+
+    background:
+        rgba(255, 255, 255, 0.25);
+
+}
+
+
+.header-content h1 {
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+}
+
+
+.header-content p {
+
+    margin-top: 4px;
+
+    font-size: 13px;
+
+    opacity: 0.75;
+
+}
+
+
+/* =========================================
+   MAIN
+   ========================================= */
+
+main {
+
+    padding: 25px 20px;
+
+}
+
+
+/* =========================================
+   SUMMARY CARD
+   ========================================= */
+
+.summary-card {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 24px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b2a4a,
+            #17608c
+        );
+
+    border-radius: 21px;
+
+    box-shadow:
+        0 12px 28px
+        rgba(9, 38, 70, 0.18);
+
+}
+
+
+.summary-label {
+
+    font-size: 13px;
+
+    opacity: 0.75;
+
+}
+
+
+.summary-card h2 {
+
+    font-size: 36px;
+
+    margin-top: 5px;
+
+}
+
+
+.summary-subtitle {
+
+    font-size: 12px;
+
+    opacity: 0.6;
+
+}
+
+
+.summary-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background:
+        rgba(255, 255, 255, 0.14);
+
+    font-size: 27px;
+
+}
+
+
+/* =========================================
+   FILTERS
+   ========================================= */
+
+.filter-section {
+
+    display: flex;
+
+    gap: 9px;
+
+    margin: 24px 0;
+
+    overflow-x: auto;
+
+}
+
+
+.filter-btn {
+
+    border: 1px solid #dfe6ee;
+
+    background: white;
+
+    color: #607086;
+
+    padding: 9px 15px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition: 0.2s;
+
+}
+
+
+.filter-btn:hover {
+
+    border-color: #0b2a4a;
+
+    color: #0b2a4a;
+
+}
+
+
+.filter-btn.active {
+
+    background: #0b2a4a;
+
+    color: white;
+
+    border-color: #0b2a4a;
+
+}
+
+
+/* =========================================
+   TITLE
+   ========================================= */
+
+.title-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 14px;
+
+}
+
+
+.title-row h2 {
+
+    font-size: 19px;
+
+}
+
+
+.title-row span {
+
+    color: #8994a5;
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================
+   TRANSACTION LIST
+   ========================================= */
+
+.transaction-list {
+
+    border: 1px solid #e6ecf2;
+
+    border-radius: 19px;
+
+    overflow: hidden;
+
+    background: white;
+
+}
+
+
+/* =========================================
+   TRANSACTION ITEM
+   ========================================= */
+
+.transaction-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 17px;
+
+    border-bottom:
+        1px solid #edf1f5;
+
+    transition: 0.2s;
+
+}
+
+
+.transaction-item:last-child {
+
+    border-bottom: none;
+
+}
+
+
+.transaction-item:hover {
+
+    background: #fafcff;
+
+}
+
+
+/* =========================================
+   ICON
+   ========================================= */
+
+.transaction-icon {
+
+    width: 46px;
+
+    height: 46px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: #eef4fa;
+
+    font-size: 21px;
+
+}
+
+
+/* =========================================
+   DETAILS
+   ========================================= */
+
+.transaction-details {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+.transaction-name {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: #203247;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.transaction-category {
+
+    display: inline-block;
+
+    margin-top: 4px;
+
+    padding: 3px 7px;
+
+    border-radius: 6px;
+
+    background: #f1f5f9;
+
+    color: #718096;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+}
+
+
+.transaction-date {
+
+    margin-top: 5px;
+
+    color: #8a94a6;
+
+    font-size: 11px;
+
+}
+
+
+.transaction-status {
+
+    margin-top: 3px;
+
+    color: #159447;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+}
+
+
+/* =========================================
+   AMOUNT
+   ========================================= */
+
+.transaction-right {
+
+    text-align: right;
+
+    flex-shrink: 0;
+
+}
+
+
+.transaction-amount {
+
+    font-size: 14px;
+
+    font-weight: 750;
+
+}
+
+
+.credit {
+
+    color: #159447;
+
+}
+
+
+.debit {
+
+    color: #d64545;
+
+}
+
+
+/* =========================================
+   EMPTY STATE
+   ========================================= */
+
+.empty {
+
+    text-align: center;
+
+    padding: 50px 20px;
+
+    color: #8994a5;
+
+}
+
+
+.empty-icon {
+
+    font-size: 40px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.empty h3 {
+
+    color: #34445a;
+
+    font-size: 16px;
+
+    margin-bottom: 6px;
+
+}
+
+
+.empty p {
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================
+   ERROR
+   ========================================= */
+
+.error-message {
+
+    text-align: center;
+
+    padding: 35px 20px;
+
+    color: #d64545;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================
+   LOADING
+   ========================================= */
+
+.loading {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    padding: 45px 20px;
+
+    color: #8994a5;
+
+    font-size: 13px;
+
+}
+
+
+.loading-spinner {
+
+    width: 30px;
+
+    height: 30px;
+
+    border: 3px solid #e5ebf2;
+
+    border-top-color: #0b2a4a;
+
+    border-radius: 50%;
+
+    animation:
+        spin 0.8s linear infinite;
+
+}
+
+
+@keyframes spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* =========================================
+   BACK BUTTON
+   ========================================= */
+
+.dashboard-btn {
+
+    width: 100%;
+
+    padding: 15px;
+
+    margin-top: 22px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: #092646;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+.dashboard-btn:hover {
+
+    background: #164e7a;
+
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 500px) {
+
+    .transactions-header {
+
+        padding: 20px;
+
+    }
+
+
+    main {
+
+        padding: 22px 15px;
+
+    }
+
+
+    .summary-card {
+
+        padding: 21px;
+
+    }
+
+
+    .summary-card h2 {
+
+        font-size: 32px;
+
+    }
+
+
+    .transaction-item {
+
+        padding: 15px 12px;
+
+        gap: 10px;
+
+    }
+
+
+    .transaction-icon {
+
+        width: 42px;
+
+        height: 42px;
+
+        font-size: 19px;
+
+    }
+
+
+    .transaction-name {
+
+        font-size: 13px;
+
+    }
+
+
+    .transaction-amount {
+
+        font-size: 13px;
+
+    }
+
+}

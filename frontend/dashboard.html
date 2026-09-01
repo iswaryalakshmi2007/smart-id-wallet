@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Smart ID Wallet - Dashboard</title>
+
+    <!-- Dashboard CSS -->
+    <link
+        rel="stylesheet"
+        href="css/dashboard.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =================================
+         HEADER
+    ================================= -->
+
+    <header class="header">
+
+        <div>
+
+            <h1>
+                Smart ID Wallet
+            </h1>
+
+            <p>
+                Smart College Digital Wallet
+            </p>
+
+        </div>
+
+
+        <div class="profile-icon">
+
+            👤
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =================================
+         STUDENT INFORMATION
+    ================================= -->
+
+    <section class="student-info">
+
+        <h2>
+
+            Welcome,
+
+            <span id="studentName">
+                Student
+            </span>
+
+            👋
+
+        </h2>
+
+
+        <p>
+
+            <strong>Student ID:</strong>
+
+            <span id="studentId">
+                --
+            </span>
+
+        </p>
+
+
+        <p>
+
+            <strong>Department:</strong>
+
+            <span id="department">
+                --
+            </span>
+
+        </p>
+
+
+        <p>
+
+            <strong>Academic Year:</strong>
+
+            <span id="academicYear">
+                --
+            </span>
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================
+         WALLET BALANCE
+    ================================= -->
+
+    <section class="wallet-card">
+
+        <div class="wallet-label">
+
+            Available Balance
+
+        </div>
+
+
+        <div class="balance">
+
+            ₹<span id="balance">
+                0.00
+            </span>
+
+        </div>
+
+
+        <div class="wallet-name">
+
+            Smart College Wallet
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================
+         QUICK ACTIONS
+    ================================= -->
+
+    <h2 class="section-title">
+
+        Quick Actions
+
+    </h2>
+
+
+    <div class="quick-actions">
+
+
+        <!-- =================================
+             SCAN & PAY
+             DIRECTLY CONNECTED TO scan-pay.html
+        ================================= -->
+
+        <button
+            type="button"
+            class="action-btn scan-btn"
+            onclick="window.location.href='scan-pay.html'"
+        >
+
+            <span class="action-icon">
+
+                📷
+
+            </span>
+
+
+            <span class="action-text">
+
+                Scan & Pay
+
+            </span>
+
+        </button>
+
+
+
+        <!-- =================================
+             ADD MONEY
+        ================================= -->
+
+        <button
+            type="button"
+            class="action-btn add-btn"
+            onclick="addMoney()"
+        >
+
+            <span class="action-icon">
+
+                💳
+
+            </span>
+
+
+            <span class="action-text">
+
+                Add Money
+
+            </span>
+
+        </button>
+
+
+
+        <!-- =================================
+             MY ID
+        ================================= -->
+
+        <button
+            type="button"
+            class="action-btn id-btn"
+            onclick="viewID()"
+        >
+
+            <span class="action-icon">
+
+                🪪
+
+            </span>
+
+
+            <span class="action-text">
+
+                My ID
+
+            </span>
+
+        </button>
+
+
+
+        <!-- =================================
+             TRANSACTIONS
+        ================================= -->
+
+        <button
+            type="button"
+            class="action-btn transaction-btn"
+            onclick="viewTransactions()"
+        >
+
+            <span class="action-icon">
+
+                🧾
+
+            </span>
+
+
+            <span class="action-text">
+
+                Transactions
+
+            </span>
+
+        </button>
+
+
+    </div>
+
+
+
+    <!-- =================================
+         LOW BALANCE ALERT
+    ================================= -->
+
+    <div
+        class="balance-alert"
+        id="lowBalanceAlert"
+        style="display: none;"
+    >
+
+        <div class="alert-icon">
+
+            🔔
+
+        </div>
+
+
+        <div>
+
+            <div class="alert-title">
+
+                Low Balance Alert
+
+            </div>
+
+
+            <div class="alert-text">
+
+                Your wallet balance is low.
+                Please add money to continue.
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================
+         RECENT TRANSACTIONS
+    ================================= -->
+
+    <section class="transactions-section">
+
+        <h2 class="section-title">
+
+            Recent Transactions
+
+        </h2>
+
+
+        <div
+            class="transaction-list"
+            id="recentTransactions"
+        >
+
+            <!--
+                Transactions will be loaded
+                dynamically using dashboard.js
+            -->
+
+            <div class="no-transactions">
+
+                No transactions yet
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================
+         BOTTOM NAVIGATION
+    ================================= -->
+
+    <nav class="bottom-nav">
+
+
+        <!-- HOME -->
+
+        <button
+            type="button"
+            class="nav-btn nav-active"
+            onclick="goHome()"
+        >
+
+            <span class="nav-icon">
+
+                🏠
+
+            </span>
+
+            Home
+
+        </button>
+
+
+
+        <!-- HISTORY -->
+
+        <button
+            type="button"
+            class="nav-btn"
+            onclick="viewTransactions()"
+        >
+
+            <span class="nav-icon">
+
+                🧾
+
+            </span>
+
+            History
+
+        </button>
+
+
+
+        <!-- MY ID -->
+
+        <button
+            type="button"
+            class="nav-btn"
+            onclick="viewID()"
+        >
+
+            <span class="nav-icon">
+
+                🪪
+
+            </span>
+
+            My ID
+
+        </button>
+
+
+
+        <!-- PROFILE -->
+
+        <button
+            type="button"
+            class="nav-btn"
+            onclick="profile()"
+        >
+
+            <span class="nav-icon">
+
+                👤
+
+            </span>
+
+            Profile
+
+        </button>
+
+
+    </nav>
+
+</div>
+
+
+
+<!-- =================================
+     DASHBOARD JAVASCRIPT
+================================= -->
+
+<script src="js/dashboard.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,805 @@
+/* =========================================
+   RESET
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background:
+        #f4f7fb;
+
+    color:
+        #172033;
+
+}
+
+
+/* =========================================
+   PAGE
+========================================= */
+
+.history-page {
+
+    width: 100%;
+
+    max-width: 520px;
+
+    min-height: 100vh;
+
+    margin: auto;
+
+    background: #f8fafc;
+
+    padding-bottom: 90px;
+
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.history-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 22px 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #172554,
+            #2563eb
+        );
+
+    color: white;
+
+    border-radius:
+        0 0 25px 25px;
+
+}
+
+
+.back-button {
+
+    width: 42px;
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,0.15);
+
+    color: white;
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+}
+
+
+.back-button:hover {
+
+    background:
+        rgba(255,255,255,0.25);
+
+}
+
+
+.header-title {
+
+    flex: 1;
+
+}
+
+
+.header-title h1 {
+
+    font-size: 22px;
+
+    margin-bottom: 4px;
+
+}
+
+
+.header-title p {
+
+    font-size: 13px;
+
+    opacity: 0.8;
+
+}
+
+
+.header-icon {
+
+    font-size: 28px;
+
+}
+
+
+/* =========================================
+   STUDENT CARD
+========================================= */
+
+.student-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin: 20px;
+
+    padding: 16px;
+
+    background: white;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(15, 23, 42, 0.07);
+
+}
+
+
+.student-avatar {
+
+    width: 50px;
+
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background:
+        #e0ecff;
+
+    font-size: 25px;
+
+}
+
+
+.student-card h3 {
+
+    font-size: 16px;
+
+}
+
+
+.student-card p {
+
+    margin-top: 4px;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================
+   BALANCE CARD
+========================================= */
+
+.balance-card {
+
+    margin: 20px;
+
+    padding: 22px;
+
+    border-radius: 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #1e3a8a
+        );
+
+    color: white;
+
+    box-shadow:
+        0 10px 25px
+        rgba(30, 64, 175, 0.2);
+
+}
+
+
+.balance-card span {
+
+    font-size: 13px;
+
+    opacity: 0.75;
+
+}
+
+
+.balance-card h2 {
+
+    margin-top: 7px;
+
+    font-size: 28px;
+
+}
+
+
+.wallet-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    border-radius: 17px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        rgba(255,255,255,0.13);
+
+    font-size: 27px;
+
+}
+
+
+/* =========================================
+   FILTER
+========================================= */
+
+.filter-section {
+
+    display: flex;
+
+    gap: 10px;
+
+    padding: 0 20px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.filter-btn {
+
+    flex: 1;
+
+    padding: 11px 8px;
+
+    border: 1px solid #dbe3ef;
+
+    background: white;
+
+    border-radius: 12px;
+
+    color: #64748b;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+.filter-btn:hover {
+
+    transform: translateY(-1px);
+
+}
+
+
+.filter-btn.active {
+
+    background: #2563eb;
+
+    color: white;
+
+    border-color: #2563eb;
+
+}
+
+
+/* =========================================
+   SUMMARY
+========================================= */
+
+.transaction-summary {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 0 20px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.transaction-summary h2 {
+
+    font-size: 18px;
+
+}
+
+
+.transaction-summary span {
+
+    font-size: 12px;
+
+    color: #64748b;
+
+}
+
+
+/* =========================================
+   TRANSACTION LIST
+========================================= */
+
+#transactionList {
+
+    padding: 0 20px;
+
+}
+
+
+.transaction-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 16px;
+
+    margin-bottom: 12px;
+
+    background: white;
+
+    border-radius: 17px;
+
+    box-shadow:
+        0 4px 16px
+        rgba(15, 23, 42, 0.06);
+
+    transition: 0.2s;
+
+}
+
+
+.transaction-card:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 22px
+        rgba(15, 23, 42, 0.09);
+
+}
+
+
+/* =========================================
+   TRANSACTION ICON
+========================================= */
+
+.transaction-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    min-width: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 15px;
+
+    font-size: 23px;
+
+}
+
+
+.transaction-icon.credit-icon {
+
+    background:
+        #dcfce7;
+
+}
+
+
+.transaction-icon.debit-icon {
+
+    background:
+        #fee2e2;
+
+}
+
+
+/* =========================================
+   TRANSACTION INFO
+========================================= */
+
+.transaction-info {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+.transaction-info h3 {
+
+    font-size: 14px;
+
+    color: #172033;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.transaction-info .category {
+
+    display: inline-block;
+
+    margin-top: 4px;
+
+    font-size: 11px;
+
+    color: #2563eb;
+
+    font-weight: 600;
+
+}
+
+
+.transaction-info .date {
+
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 11px;
+
+    color: #94a3b8;
+
+}
+
+
+/* =========================================
+   AMOUNT
+========================================= */
+
+.transaction-amount {
+
+    text-align: right;
+
+    min-width: 75px;
+
+}
+
+
+.transaction-amount .amount {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+}
+
+
+.transaction-amount .credit {
+
+    color: #16a34a;
+
+}
+
+
+.transaction-amount .debit {
+
+    color: #dc2626;
+
+}
+
+
+.transaction-amount .status {
+
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 10px;
+
+    color: #16a34a;
+
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-state {
+
+    text-align: center;
+
+    padding: 50px 25px;
+
+    color: #64748b;
+
+}
+
+
+.empty-icon {
+
+    width: 75px;
+
+    height: 75px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 25px;
+
+    background: #eaf1ff;
+
+    font-size: 35px;
+
+}
+
+
+.empty-state h2 {
+
+    color: #172033;
+
+    font-size: 18px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.empty-state p {
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.loading {
+
+    text-align: center;
+
+    padding: 40px;
+
+    color: #64748b;
+
+}
+
+
+.loading-icon {
+
+    font-size: 30px;
+
+    margin-bottom: 10px;
+
+}
+
+
+/* =========================================
+   BOTTOM NAVIGATION
+========================================= */
+
+.bottom-nav {
+
+    position: fixed;
+
+    bottom: 0;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 100%;
+
+    max-width: 520px;
+
+    display: flex;
+
+    justify-content: space-around;
+
+    padding: 10px 8px;
+
+    background: white;
+
+    border-top: 1px solid #e2e8f0;
+
+    box-shadow:
+        0 -5px 20px
+        rgba(15, 23, 42, 0.08);
+
+    z-index: 100;
+
+}
+
+
+.bottom-nav button {
+
+    border: none;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 4px;
+
+    color: #94a3b8;
+
+    padding: 5px 14px;
+
+}
+
+
+.bottom-nav button span {
+
+    font-size: 20px;
+
+}
+
+
+.bottom-nav button small {
+
+    font-size: 10px;
+
+}
+
+
+.bottom-nav button.nav-active {
+
+    color: #2563eb;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 420px) {
+
+    .history-header {
+
+        padding: 18px 15px;
+
+    }
+
+
+    .history-header h1 {
+
+        font-size: 19px;
+
+    }
+
+
+    .student-card,
+    .balance-card {
+
+        margin-left: 15px;
+
+        margin-right: 15px;
+
+    }
+
+
+    .filter-section {
+
+        padding: 0 15px;
+
+    }
+
+
+    #transactionList {
+
+        padding: 0 15px;
+
+    }
+
+
+    .transaction-card {
+
+        padding: 13px;
+
+    }
+
+
+    .transaction-icon {
+
+        width: 43px;
+
+        height: 43px;
+
+        min-width: 43px;
+
+    }
+
+
+    .transaction-info h3 {
+
+        font-size: 13px;
+
+    }
+
+
+    .transaction-amount {
+
+        min-width: 65px;
+
+    }
+
+}

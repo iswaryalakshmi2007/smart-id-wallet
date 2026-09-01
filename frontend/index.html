@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart ID Wallet - Login</title>
+
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+
+    <div class="login-page">
+
+        <div class="login-card">
+
+            <!-- LOGO -->
+            <div class="logo-section">
+
+                <div class="logo">
+                    🪪
+                </div>
+
+                <h1>Smart ID Wallet</h1>
+
+                <p>
+                    Smart College Digital Wallet
+                </p>
+
+            </div>
+
+
+            <!-- LOGIN FORM -->
+            <form class="login-form" onsubmit="event.preventDefault(); login();">
+
+                <!-- STUDENT ID -->
+                <div class="input-group">
+
+                    <label for="studentId">
+                        Student ID
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            🎓
+                        </span>
+
+                        <input
+                            type="text"
+                            id="studentId"
+                            placeholder="Enter your Student ID"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+                <div class="input-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            🔐
+                        </span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword()"
+                            id="passwordToggle"
+                        >
+                            👁️
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FORGOT PASSWORD -->
+                <div class="form-options">
+
+                    <a
+                        href="#"
+                        class="forgot-password"
+                        onclick="forgotPassword(event)"
+                    >
+                        Forgot Password?
+                    </a>
+
+                </div>
+
+
+                <!-- LOGIN BUTTON -->
+                <button
+                    type="submit"
+                    class="login-button"
+                    id="loginButton"
+                >
+                    Login
+                </button>
+
+
+                <!-- MESSAGE -->
+                <div id="message"></div>
+
+            </form>
+
+
+            <!-- DEMO LOGIN -->
+            <div class="demo-login">
+
+                <div class="demo-login-title">
+                    Demo Login
+                </div>
+
+                <p>
+                    Student ID:
+                    <strong>25EC060</strong>
+                </p>
+
+                <p>
+                    Password:
+                    <strong>123456</strong>
+                </p>
+
+            </div>
+
+
+            <!-- SECURITY -->
+            <div class="security-note">
+
+                🔒
+                <span>
+                    Secure College Wallet
+                </span>
+
+            </div>
+
+
+            <!-- FOOTER -->
+            <div class="login-footer">
+
+                © 2026 Smart ID Wallet
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LOGIN JAVASCRIPT -->
+    <script src="js/login.js"></script>
+
+</body>
+
+</html>
