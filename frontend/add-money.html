@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Money | Smart ID Wallet</title>
+    <link rel="stylesheet" href="css/add-money.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="page">
+
+        <!-- HEADER -->
+        <header class="header">
+            <button type="button" class="back-btn" onclick="window.location.href='dashboard.html'" aria-label="Back">
+                ←
+            </button>
+            <div class="header-title">
+                <h1>Add Money</h1>
+                <p>Campus Wallet Top-up</p>
+            </div>
+            <div class="header-icon">💳</div>
+        </header>
+
+        <main class="topup-container">
+
+            <!-- CURRENT BALANCE CARD -->
+            <section class="current-balance-card">
+                <div>
+                    <span class="sub-label">Current Available Balance</span>
+                    <h2 class="current-balance-val" id="currentBalance">₹0.00</h2>
+                </div>
+                <div class="wallet-badge">Campus Wallet</div>
+            </section>
+
+            <!-- TOP-UP CARD -->
+            <section class="topup-card">
+                <div class="card-intro">
+                    <div class="icon-circle">⚡</div>
+                    <div>
+                        <h3>Enter Top-up Amount</h3>
+                        <p>Select quick amount or type custom value</p>
+                    </div>
+                </div>
+
+                <!-- AMOUNT INPUT -->
+                <div class="amount-field-wrapper">
+                    <span class="currency-prefix">₹</span>
+                    <input
+                        type="number"
+                        id="amountInput"
+                        placeholder="500"
+                        min="1"
+                        max="10000"
+                        step="1"
+                        value="500"
+                        oninput="updateSummary()"
+                    >
+                </div>
+
+                <!-- QUICK CHIPS -->
+                <div class="preset-chips">
+                    <button type="button" class="chip" onclick="setAmount(100)">+₹100</button>
+                    <button type="button" class="chip" onclick="setAmount(200)">+₹200</button>
+                    <button type="button" class="chip active" onclick="setAmount(500)">+₹500</button>
+                    <button type="button" class="chip" onclick="setAmount(1000)">+₹1,000</button>
+                </div>
+
+                <!-- ORDER SUMMARY BREAKDOWN -->
+                <div class="order-summary-box">
+                    <h4>Top-up Summary</h4>
+                    <div class="summary-line">
+                        <span>Top-up Amount</span>
+                        <strong id="summaryTopup">₹500.00</strong>
+                    </div>
+                    <div class="summary-line">
+                        <span>Convenience / Gateway Fee</span>
+                        <span class="free-tag">FREE (₹0.00)</span>
+                    </div>
+                    <div class="summary-line total-line">
+                        <span>Total Payable</span>
+                        <strong id="summaryTotal">₹500.00</strong>
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTON -->
+                <button type="button" class="proceed-btn" id="proceedBtn" onclick="initiatePayment()">
+                    <span>Proceed to Payment</span>
+                    <span class="btn-arrow">→</span>
+                </button>
+
+                <!-- SECURITY NOTICE -->
+                <div class="security-note">
+                    🔒 Protected with Server-Side Verification & Audit Ledger
+                </div>
+
+            </section>
+
+        </main>
+
+        <!-- SANDBOX PAYMENT GATEWAY MODAL (SIMULATED GATEWAY / WEBHOOK INTEGRATION) -->
+        <div class="gateway-modal" id="gatewayModal" style="display: none;">
+            <div class="gateway-backdrop" onclick="closeGatewayModal()"></div>
+            <div class="gateway-card">
+                <div class="gateway-header">
+                    <div class="gateway-logo">
+                        <span>🛡️</span>
+                        <div>
+                            <strong>Campus Payment Gateway</strong>
+                            <small id="gatewayOrderId">ORDER_ID: PENDING</small>
+                        </div>
+                    </div>
+                    <button type="button" class="close-modal-btn" onclick="closeGatewayModal()">✕</button>
+                </div>
+
+                <div class="gateway-body">
+                    <div class="gateway-amount-banner">
+                        <span>Amount to Authorize:</span>
+                        <strong id="gatewayAmount">₹500.00</strong>
+                    </div>
+
+                    <!-- PAYMENT METHODS TABS -->
+                    <div class="gateway-methods">
+                        <div class="method-chip selected">
+                            <span>📱 UPI / QR</span>
+                        </div>
+                        <div class="method-chip">
+                            <span>💳 Debit / Credit Card</span>
+                        </div>
+                        <div class="method-chip">
+                            <span>🏦 Net Banking</span>
+                        </div>
+                    </div>
+
+                    <div class="gateway-simulation-note">
+                        <p><strong>Sandbox Test Environment:</strong> In live production, this window routes to Razorpay/Stripe checkout. Completing this test authorization will send signed server verification to credit your wallet.</p>
+                    </div>
+                </div>
+
+                <div class="gateway-footer">
+                    <button type="button" class="gw-cancel-btn" onclick="closeGatewayModal()">Cancel</button>
+                    <button type="button" class="gw-pay-btn" id="gwConfirmBtn" onclick="confirmPaymentGateway()">
+                        <span id="gwBtnText">Authorize Payment (₹500)</span>
+                        <span id="gwSpinner" style="display: none;">⏳</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAYMENT SUCCESS RECEIPT MODAL -->
+        <div class="receipt-modal" id="receiptModal" style="display: none;">
+            <div class="receipt-backdrop"></div>
+            <div class="receipt-card">
+                <div class="receipt-check">✓</div>
+                <h2>Wallet Top-up Successful!</h2>
+                <p class="receipt-sub">Your payment has been verified by the server.</p>
+
+                <div class="receipt-details">
+                    <div class="receipt-row">
+                        <span>Transaction ID</span>
+                        <strong id="rcptTxnId">--</strong>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Student ID</span>
+                        <strong id="rcptStudentId">--</strong>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Amount Credited</span>
+                        <strong class="text-success" id="rcptAmount">₹0.00</strong>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Previous Balance</span>
+                        <span id="rcptPrevBal">₹0.00</span>
+                    </div>
+                    <div class="receipt-row total-highlight">
+                        <span>Updated Balance</span>
+                        <strong id="rcptNewBal">₹0.00</strong>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Payment Reference</span>
+                        <small id="rcptRef">--</small>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Date & Time</span>
+                        <span id="rcptDate">--</span>
+                    </div>
+                </div>
+
+                <button type="button" class="receipt-done-btn" onclick="window.location.href='dashboard.html'">
+                    Done & Return to Dashboard
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/add-money.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopkeeper POS & Billing | Smart ID Wallet</title>
+    <link rel="stylesheet" href="shopkeeper.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="pos-app">
+
+        <!-- SHOPKEEPER TOP NAVBAR -->
+        <header class="pos-header">
+            <div class="header-left">
+                <div class="shop-logo">🏪</div>
+                <div>
+                    <h1 id="shopNameHeading">Campus General Store</h1>
+                    <p class="operator-meta">Operator: <strong id="operatorName">Ramesh Kumar</strong> • <span id="shopCategory">General Store</span></p>
+                </div>
+            </div>
+
+            <!-- TAB CONTROLS -->
+            <nav class="pos-nav">
+                <button type="button" class="nav-btn active" id="navPosBtn" onclick="switchView('pos')">
+                    🛒 New Billing POS
+                </button>
+                <button type="button" class="nav-btn" id="navSalesBtn" onclick="switchView('sales')">
+                    📊 Sales History
+                </button>
+                <button type="button" class="nav-btn" id="navProductsBtn" onclick="switchView('products')">
+                    🏷️ Shop Products
+                </button>
+            </nav>
+
+            <div class="header-right">
+                <button type="button" class="logout-btn" onclick="Auth.logout()">
+                    🚪 Sign Out
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI SUMMARY METRICS BANNER -->
+        <section class="kpi-banner">
+            <div class="kpi-card">
+                <span class="kpi-label">Today's Sales</span>
+                <strong class="kpi-val text-accent" id="kpiTodaySales">₹0.00</strong>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Today's Purchases</span>
+                <strong class="kpi-val" id="kpiTodayTxns">0</strong>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Total Revenue Collected</span>
+                <strong class="kpi-val" id="kpiTotalCollected">₹0.00</strong>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Lifetime Purchases</span>
+                <strong class="kpi-val" id="kpiTotalTxns">0</strong>
+            </div>
+        </section>
+
+        <!-- VIEW 1: POS BILLING WORKFLOW -->
+        <main class="pos-main-view" id="viewPos">
+
+            <div class="pos-layout-grid">
+
+                <!-- LEFT COLUMN: SCANNER & STUDENT DETAILS & PRODUCTS -->
+                <div class="pos-left-panel">
+
+                    <!-- STEP 1: STUDENT SCAN & IDENTIFICATION -->
+                    <div class="panel-card" id="studentSearchCard">
+                        <div class="panel-header">
+                            <span class="step-badge">STEP 1</span>
+                            <h3>Identify Student</h3>
+                        </div>
+
+                        <div class="search-actions-row">
+                            <div class="search-input-group">
+                                <span class="search-icon">🔍</span>
+                                <input
+                                    type="text"
+                                    id="studentScanInput"
+                                    placeholder="Scan Student Barcode or Enter ID (e.g. 23ECE001)"
+                                    autocomplete="off"
+                                    onkeydown="if(event.key==='Enter') searchStudent();"
+                                >
+                            </div>
+                            <button type="button" class="primary-scan-btn" onclick="searchStudent()">
+                                Identify Student
+                            </button>
+                            <button type="button" class="camera-scan-btn" onclick="toggleCameraScanner()" title="Toggle Camera Scanner">
+                                📷 Camera
+                            </button>
+                        </div>
+
+                        <!-- CAMERA SCANNER CONTAINER (COLLAPSIBLE) -->
+                        <div class="camera-stream-box" id="cameraBox" style="display: none;">
+                            <video id="scannerVideo" playsinline style="width: 100%; max-height: 220px; border-radius: 12px; background: #000;"></video>
+                            <div class="cam-overlay">
+                                <span class="target-rect"></span>
+                                <p>Point camera at student's digital ID QR/barcode</p>
+                            </div>
+                            <button type="button" class="cam-close-btn" onclick="toggleCameraScanner()">Stop Camera</button>
+                        </div>
+
+                        <!-- DEMO QUICK SELECT CHIP FOR ZERO-CLICK IDENTIFICATION -->
+                        <div class="quick-demo-student">
+                            <span>Demo Shortcut:</span>
+                            <button type="button" class="quick-chip" onclick="quickSelectStudent('23ECE001')">
+                                🎓 23ECE001 (Iswarya • ₹850)
+                            </button>
+                            <button type="button" class="quick-chip" onclick="quickSelectStudent('25EC060')">
+                                🎓 25EC060 (Kavitha)
+                            </button>
+                        </div>
+
+                        <!-- STUDENT DETAILS BANNER (APPEARS AFTER IDENTIFICATION) -->
+                        <div class="student-identified-banner" id="studentBanner" style="display: none;">
+                            <div class="student-id-avatar">👤</div>
+                            <div class="student-id-info">
+                                <div class="id-name-row">
+                                    <h4 id="identifiedName">Iswarya</h4>
+                                    <span class="id-tag" id="identifiedId">23ECE001</span>
+                                    <span class="verified-pill">✓ Verified</span>
+                                </div>
+                                <p class="id-sub" id="identifiedDept">Electronics & Communication Engineering • 2025-2029</p>
+                            </div>
+                            <div class="student-wallet-display">
+                                <span class="lbl">Wallet Balance</span>
+                                <strong class="val" id="identifiedBalance">₹850.00</strong>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- STEP 2: PRODUCT SELECTION GRID -->
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <span class="step-badge">STEP 2</span>
+                            <h3>Select Shop Products</h3>
+                            <span class="product-count" id="productCountBadge">0 Products</span>
+                        </div>
+
+                        <div class="product-catalog-grid" id="productGrid">
+                            <div class="loading-state">Loading shop inventory...</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT COLUMN: REAL-TIME CART & BILL SUMMARY -->
+                <div class="pos-right-panel">
+
+                    <div class="bill-summary-card">
+                        <div class="bill-header">
+                            <h3>🛒 Bill Summary</h3>
+                            <button type="button" class="clear-cart-btn" onclick="clearCart()">Clear All</button>
+                        </div>
+
+                        <!-- CART ITEMS TABLE -->
+                        <div class="cart-items-container" id="cartContainer">
+                            <div class="empty-cart-state">
+                                <span>🛒</span>
+                                <p>No items added yet.<br>Click [+] on products to add to bill.</p>
+                            </div>
+                        </div>
+
+                        <!-- CALCULATION ROWS -->
+                        <div class="bill-calc-section">
+                            <div class="calc-row">
+                                <span>Total Items</span>
+                                <strong id="billItemsCount">0</strong>
+                            </div>
+                            <div class="calc-row grand-total-row">
+                                <span>Grand Total Amount</span>
+                                <strong class="total-price" id="billTotalAmount">₹0.00</strong>
+                            </div>
+
+                            <!-- WALLET DEDUCTION PREVIEW -->
+                            <div class="wallet-impact-box">
+                                <div class="calc-row">
+                                    <span>Student Wallet Balance:</span>
+                                    <strong id="impactCurrentBal">₹0.00</strong>
+                                </div>
+                                <div class="calc-row">
+                                    <span>Remaining Balance After Purchase:</span>
+                                    <strong id="impactRemainingBal" class="text-accent">₹0.00</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- WARNING / INSUFFICIENT BALANCE BOX -->
+                        <div class="pos-alert" id="posAlert" style="display: none;"></div>
+
+                        <!-- CONFIRM PURCHASE BUTTON -->
+                        <button type="button" class="confirm-purchase-btn" id="confirmPurchaseBtn" onclick="confirmPurchase()">
+                            <span id="confirmBtnText">Confirm Purchase & Deduct Wallet</span>
+                            <span id="confirmSpinner" style="display: none;">⏳</span>
+                        </button>
+
+                        <div class="atomic-guarantee-note">
+                            ⚡ <strong>Atomic Transaction:</strong> Database verifies prices, locks wallet, and creates itemized snapshots instantly.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- VIEW 2: SALES HISTORY -->
+        <section class="pos-secondary-view" id="viewSales" style="display: none;">
+            <div class="panel-card">
+                <div class="panel-header">
+                    <h3>📊 My Shop Sales History</h3>
+                    <span class="count-badge" id="salesCountBadge">0 Sales</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="pos-table">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Student ID</th>
+                                <th>Student Name</th>
+                                <th>Products Sold</th>
+                                <th>Total Amount</th>
+                                <th>Date & Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesTableBody">
+                            <tr>
+                                <td colspan="8" class="text-center">Loading sales history...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: SHOP PRODUCTS INVENTORY -->
+        <section class="pos-secondary-view" id="viewProducts" style="display: none;">
+            <div class="panel-card">
+                <div class="panel-header">
+                    <h3>🏷️ Active Inventory</h3>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="pos-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Unit Price</th>
+                                <th>Stock Status</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center">Loading inventory...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PURCHASE SUCCESS RECEIPT MODAL -->
+        <div class="receipt-modal" id="purchaseSuccessModal" style="display: none;">
+            <div class="modal-backdrop"></div>
+            <div class="modal-card receipt-paper">
+                <div class="receipt-seal">✓</div>
+                <h2>PAYMENT SUCCESSFUL</h2>
+                <p class="receipt-shop-name" id="rcptShop">Campus General Store</p>
+                <div class="receipt-dashed-line"></div>
+
+                <div class="receipt-meta-grid">
+                    <div>
+                        <span class="lbl">Transaction ID:</span>
+                        <strong id="rcptTxnId">TXN10025</strong>
+                    </div>
+                    <div>
+                        <span class="lbl">Student ID:</span>
+                        <strong id="rcptStudentId">23ECE001</strong>
+                    </div>
+                    <div>
+                        <span class="lbl">Student Name:</span>
+                        <span id="rcptStudentName">Iswarya</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Date & Time:</span>
+                        <span id="rcptDateTime">--</span>
+                    </div>
+                </div>
+
+                <div class="receipt-dashed-line"></div>
+
+                <!-- ITEMIZED RECEIPT TABLE -->
+                <div class="receipt-items-list" id="rcptItemList">
+                    <!-- Dynamic item rows -->
+                </div>
+
+                <div class="receipt-dashed-line"></div>
+
+                <div class="receipt-summary-lines">
+                    <div class="row grand">
+                        <span>TOTAL PAID</span>
+                        <strong id="rcptTotalPaid">₹190.00</strong>
+                    </div>
+                    <div class="row">
+                        <span>Previous Balance:</span>
+                        <span id="rcptPrevBal">₹850.00</span>
+                    </div>
+                    <div class="row highlight">
+                        <span>Remaining Balance:</span>
+                        <strong id="rcptRemainingBal">₹660.00</strong>
+                    </div>
+                </div>
+
+                <div class="receipt-dashed-line"></div>
+
+                <div class="receipt-actions">
+                    <button type="button" class="receipt-print-btn" onclick="window.print()">🖨️ Print Receipt</button>
+                    <button type="button" class="receipt-done-btn" onclick="finishPurchaseAndReset()">✓ New Billing (Done)</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="shopkeeper.js"></script>
+
+</body>
+
+</html>

@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Smart ID Wallet - Login</title>
-
+    <title>Smart ID Wallet - Campus Digital Payment System</title>
     <link rel="stylesheet" href="css/login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -16,64 +17,54 @@
 
         <div class="login-card">
 
-            <!-- LOGO -->
+            <!-- BRANDING & LOGO -->
             <div class="logo-section">
-
                 <div class="logo">
-                    🪪
+                    <span>🪪</span>
                 </div>
-
                 <h1>Smart ID Wallet</h1>
-
-                <p>
-                    Smart College Digital Wallet
-                </p>
-
+                <p class="subtitle">Campus ID Digital Payment System</p>
             </div>
 
+            <!-- ROLE SELECTION TABS -->
+            <div class="role-tabs" role="tablist">
+                <button type="button" class="role-tab active" id="tab-student" onclick="switchRole('student')">
+                    <span class="tab-icon">🎓</span>
+                    <span>Student</span>
+                </button>
+                <button type="button" class="role-tab" id="tab-shopkeeper" onclick="switchRole('shopkeeper')">
+                    <span class="tab-icon">🏪</span>
+                    <span>Shopkeeper</span>
+                </button>
+                <button type="button" class="role-tab" id="tab-admin" onclick="switchRole('admin')">
+                    <span class="tab-icon">🛡️</span>
+                    <span>Admin</span>
+                </button>
+            </div>
 
             <!-- LOGIN FORM -->
-            <form class="login-form" onsubmit="event.preventDefault(); login();">
+            <form class="login-form" id="loginForm" onsubmit="event.preventDefault(); handleLogin();">
 
-                <!-- STUDENT ID -->
+                <!-- DYNAMIC ID/USERNAME FIELD -->
                 <div class="input-group">
-
-                    <label for="studentId">
-                        Student ID
-                    </label>
-
+                    <label for="loginId" id="idLabel">Student ID</label>
                     <div class="input-wrapper">
-
-                        <span class="input-icon">
-                            🎓
-                        </span>
-
+                        <span class="input-icon" id="idIcon">🎓</span>
                         <input
                             type="text"
-                            id="studentId"
-                            placeholder="Enter your Student ID"
+                            id="loginId"
+                            placeholder="Enter Student ID (e.g. 23ECE001)"
                             autocomplete="username"
                             required
                         >
-
                     </div>
-
                 </div>
 
-
-                <!-- PASSWORD -->
+                <!-- PASSWORD FIELD -->
                 <div class="input-group">
-
-                    <label for="password">
-                        Password
-                    </label>
-
+                    <label for="password">Password</label>
                     <div class="input-wrapper">
-
-                        <span class="input-icon">
-                            🔐
-                        </span>
-
+                        <span class="input-icon">🔐</span>
                         <input
                             type="password"
                             id="password"
@@ -81,34 +72,17 @@
                             autocomplete="current-password"
                             required
                         >
-
                         <button
                             type="button"
                             class="password-toggle"
-                            onclick="togglePassword()"
-                            id="passwordToggle"
+                            onclick="togglePasswordVisibility()"
+                            id="passwordToggleBtn"
+                            aria-label="Toggle password visibility"
                         >
                             👁️
                         </button>
-
                     </div>
-
                 </div>
-
-
-                <!-- FORGOT PASSWORD -->
-                <div class="form-options">
-
-                    <a
-                        href="#"
-                        class="forgot-password"
-                        onclick="forgotPassword(event)"
-                    >
-                        Forgot Password?
-                    </a>
-
-                </div>
-
 
                 <!-- LOGIN BUTTON -->
                 <button
@@ -116,60 +90,46 @@
                     class="login-button"
                     id="loginButton"
                 >
-                    Login
+                    <span id="btnText">Sign In to Wallet</span>
+                    <span class="btn-spinner" id="btnSpinner" style="display: none;">⏳</span>
                 </button>
 
-
-                <!-- MESSAGE -->
-                <div id="message"></div>
+                <!-- STATUS MESSAGE -->
+                <div id="loginMessage" class="login-message" style="display: none;"></div>
 
             </form>
 
-
-            <!-- DEMO LOGIN -->
-            <div class="demo-login">
-
-                <div class="demo-login-title">
-                    Demo Login
+            <!-- ONE-CLICK DEMO FILL CHIPS -->
+            <div class="demo-section">
+                <div class="demo-header">
+                    <span>⚡ Quick Demo Credentials</span>
                 </div>
-
-                <p>
-                    Student ID:
-                    <strong>25EC060</strong>
-                </p>
-
-                <p>
-                    Password:
-                    <strong>123456</strong>
-                </p>
-
+                <div class="demo-chips">
+                    <button type="button" class="demo-chip" onclick="fillDemo('student')">
+                        <strong>Student:</strong> 23ECE001 (₹850)
+                    </button>
+                    <button type="button" class="demo-chip" onclick="fillDemo('shopkeeper')">
+                        <strong>Shop:</strong> Campus General Store
+                    </button>
+                    <button type="button" class="demo-chip" onclick="fillDemo('admin')">
+                        <strong>Admin:</strong> admin01
+                    </button>
+                </div>
             </div>
 
-
-            <!-- SECURITY -->
-            <div class="security-note">
-
-                🔒
-                <span>
-                    Secure College Wallet
-                </span>
-
-            </div>
-
-
-            <!-- FOOTER -->
-            <div class="login-footer">
-
-                © 2026 Smart ID Wallet
-
+            <!-- FOOTER SECURITY BADGE -->
+            <div class="security-footer">
+                <span class="shield">🔒</span>
+                <span>Role-Based Authentication & End-to-End Ledger Protection</span>
             </div>
 
         </div>
 
     </div>
 
-
-    <!-- LOGIN JAVASCRIPT -->
+    <!-- SCRIPTS -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/login.js"></script>
 
 </body>

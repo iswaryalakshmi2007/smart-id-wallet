@@ -1,6 +1,23 @@
-/* =========================================
-   SMART ID WALLET - DASHBOARD
-   ========================================= */
+/* =====================================================
+   SMART ID WALLET - STUDENT DASHBOARD STYLES
+   ===================================================== */
+
+:root {
+    --primary: #0f172a;
+    --primary-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    --wallet-gradient: linear-gradient(135deg, #042f2e 0%, #0d9488 50%, #0284c7 100%);
+    --accent-emerald: #10b981;
+    --accent-blue: #3b82f6;
+    --accent-purple: #8b5cf6;
+    --accent-amber: #f59e0b;
+    --bg-page: #f8fafc;
+    --card-bg: #ffffff;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    --shadow-card: 0 20px 30px -10px rgba(13, 148, 136, 0.3);
+}
 
 * {
     margin: 0;
@@ -9,196 +26,237 @@
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f7fb;
-    color: #172033;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #e2e8f0;
+    color: var(--text-dark);
     min-height: 100vh;
 }
-
-/* =========================================
-   APP CONTAINER
-   ========================================= */
 
 .app {
     width: 100%;
-    max-width: 480px;
+    max-width: 500px;
     min-height: 100vh;
-    margin: auto;
-    background: #ffffff;
+    margin: 0 auto;
+    background: var(--bg-page);
     position: relative;
-    padding-bottom: 90px;
+    padding-bottom: 95px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
 }
 
-/* =========================================
-   HEADER
-   ========================================= */
-
+/* HEADER */
 .header {
-    background: linear-gradient(135deg, #071d3a, #0d3b66);
-    color: white;
-    padding: 24px 22px;
+    background: var(--primary-gradient);
+    color: #ffffff;
+    padding: 22px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-radius: 0 0 24px 24px;
 }
 
-.header h1 {
-    font-size: 23px;
-    margin-bottom: 6px;
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.header p {
-    font-size: 13px;
-    opacity: 0.75;
-}
-
-.profile-icon {
+.brand-avatar {
     width: 44px;
     height: 44px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 21px;
+    font-size: 24px;
+    backdrop-filter: blur(8px);
 }
 
-/* =========================================
-   STUDENT INFO
-   ========================================= */
-
-.student-info {
-    padding: 20px 20px 10px;
+.header h1 {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
 }
 
-.student-info p {
-    margin: 8px 0;
-    color: #5d6878;
-    font-size: 14px;
+.college-sub {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 500;
 }
 
-.student-info strong {
-    color: #172033;
+.header-actions {
+    display: flex;
+    gap: 8px;
 }
 
-/* =========================================
-   WALLET CARD
-   ========================================= */
+.profile-icon-btn,
+.logout-mini-btn {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
 
+.profile-icon-btn:hover,
+.logout-mini-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* STUDENT INFO CARD */
+.student-info-card {
+    margin: 16px 20px 0;
+    padding: 16px;
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-soft);
+}
+
+.welcome-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.welcome-row h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.status-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid rgba(5, 150, 105, 0.2);
+}
+
+.student-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    background: #f8fafc;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.meta-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.meta-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* WALLET CARD */
 .wallet-card {
-    margin: 15px 20px;
-    padding: 25px;
-    background: linear-gradient(135deg, #061b36, #0b3158);
-    color: white;
-    border-radius: 24px;
-    box-shadow: 0 12px 30px rgba(7, 29, 58, 0.20);
+    margin: 16px 20px;
+    padding: 24px;
+    background: var(--wallet-gradient);
+    color: #ffffff;
+    border-radius: 22px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+}
+
+.wallet-card::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 140px;
+    height: 140px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.wallet-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
 }
 
 .wallet-label {
-    font-size: 14px;
-    opacity: 0.7;
-    margin-bottom: 8px;
-}
-
-.balance {
-    font-size: 38px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
-
-.wallet-name {
-    margin-top: 20px;
     font-size: 13px;
-    opacity: 0.65;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
 }
 
-/* =========================================
-   QUICK ACTIONS
-   ========================================= */
+.balance-display {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-top: 4px;
+}
 
-.section-title {
-    padding: 10px 20px 14px;
+.wallet-chip {
+    width: 46px;
+    height: 34px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.chip-icon {
     font-size: 20px;
-    font-weight: 700;
 }
 
-.quick-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    padding: 0 20px;
+.wallet-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
 }
 
-.action-btn {
-    border: none;
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 20px 12px;
-    min-height: 105px;
-    cursor: pointer;
-    box-shadow: 0 5px 18px rgba(0,0,0,0.07);
-    border: 1px solid #edf0f5;
-    transition: 0.2s ease;
-    color: #102746;
+.campus-pass-tag {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
 }
 
-.action-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 22px rgba(0,0,0,0.10);
-}
-
-.action-btn:active {
-    transform: scale(0.97);
-}
-
-.action-icon {
-    display: block;
-    font-size: 27px;
-    margin-bottom: 9px;
-}
-
-.action-text {
-    display: block;
-    font-size: 14px;
-    font-weight: 700;
-}
-
-/* Scan & Pay */
-
-.scan-btn {
-    background: #092646;
-    color: white;
-}
-
-/* Add Money */
-
-.add-btn {
-    background: #eef7ff;
-}
-
-/* My ID */
-
-.id-btn {
-    background: #f4f1ff;
-}
-
-/* Transactions */
-
-.transaction-btn {
-    background: #fff7e9;
-}
-
-/* =========================================
-   LOW BALANCE ALERT
-   ========================================= */
-
+/* LOW BALANCE ALERT */
 .balance-alert {
-    margin: 20px;
-    padding: 16px;
-    border-radius: 17px;
-    background: #fff8df;
-    border: 1px solid #f4df91;
+    margin: 0 20px 16px;
+    padding: 14px 16px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -208,155 +266,240 @@ body {
     font-size: 24px;
 }
 
+.alert-content {
+    flex: 1;
+}
+
 .alert-title {
+    font-size: 13px;
     font-weight: 700;
-    margin-bottom: 4px;
+    color: #b45309;
+    display: block;
 }
 
 .alert-text {
     font-size: 12px;
-    color: #6f6650;
+    color: #92400e;
+    margin-top: 2px;
 }
 
-/* =========================================
-   RECENT TRANSACTIONS
-   ========================================= */
-
-.transactions-section {
-    padding: 5px 20px;
+.alert-action-btn {
+    padding: 6px 12px;
+    background: #d97706;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
 }
 
-.transaction-list {
-    background: white;
-    border-radius: 18px;
-    overflow: hidden;
-    border: 1px solid #edf0f5;
+/* SECTIONS & QUICK ACTIONS */
+.section-container {
+    padding: 0 20px 20px;
 }
 
-.transaction-item {
+.section-header-row {
     display: flex;
     align-items: center;
-    gap: 13px;
-    padding: 16px;
-    border-bottom: 1px solid #edf0f5;
+    justify-content: space-between;
+    margin-bottom: 14px;
 }
 
-.transaction-item:last-child {
-    border-bottom: none;
+.section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
 }
 
-.transaction-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 13px;
+.view-all-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0d9488;
+    text-decoration: none;
+}
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.action-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 14px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+}
+
+.action-btn:hover {
+    transform: translateY(-3px);
+    border-color: #cbd5e1;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.action-icon-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f1f5f9;
-    font-size: 19px;
+    font-size: 20px;
+    margin-bottom: 8px;
 }
 
-.transaction-details {
-    flex: 1;
-}
+.bg-emerald { background: #d1fae5; color: #065f46; }
+.bg-blue    { background: #dbeafe; color: #1e40af; }
+.bg-purple  { background: #ede9fe; color: #5b21b6; }
+.bg-amber   { background: #fef3c7; color: #92400e; }
 
-.transaction-name {
-    font-size: 14px;
+.action-title {
+    font-size: 12px;
     font-weight: 700;
-    margin-bottom: 4px;
+    color: var(--text-dark);
 }
 
-.transaction-date {
+.action-desc {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* TRANSACTION LIST */
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.txn-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.15s;
+}
+
+.txn-card:hover {
+    transform: translateX(2px);
+}
+
+.txn-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.txn-icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.txn-icon-box.credit {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.txn-icon-box.debit {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.txn-info h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.txn-date {
     font-size: 11px;
-    color: #8a94a3;
+    color: var(--text-muted);
+    margin-top: 2px;
 }
 
-.transaction-amount {
+.txn-amount {
+    font-size: 15px;
     font-weight: 700;
-    font-size: 14px;
 }
 
-.credit {
-    color: #0a9b45;
+.txn-amount.credit {
+    color: #059669;
 }
 
-.debit {
-    color: #d62f2f;
+.txn-amount.debit {
+    color: #0f172a;
 }
 
-/* =========================================
-   NO TRANSACTIONS
-   ========================================= */
-
-.no-transactions {
+.loading-state,
+.empty-state {
+    padding: 24px;
     text-align: center;
-    padding: 35px 20px;
-    color: #8993a2;
-    font-size: 14px;
+    color: var(--text-muted);
+    font-size: 13px;
+    background: #f1f5f9;
+    border-radius: 12px;
 }
 
-/* =========================================
-   BOTTOM NAVIGATION
-   ========================================= */
-
+/* BOTTOM NAVIGATION */
 .bottom-nav {
     position: fixed;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    max-width: 480px;
-    height: 72px;
-    background: rgba(255,255,255,0.97);
-    border-top: 1px solid #e9edf3;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    z-index: 100;
+    max-width: 500px;
+    background: #ffffff;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
 }
 
-.nav-btn {
-    border: none;
+.nav-item {
     background: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 16px;
+    color: var(--text-muted);
     cursor: pointer;
-    color: #7b8491;
-    font-size: 11px;
-    transition: 0.2s;
+    font-family: inherit;
+    transition: color 0.2s;
 }
 
-.nav-btn:hover {
-    color: #092646;
+.nav-item.active {
+    color: #0d9488;
 }
 
 .nav-icon {
-    display: block;
-    font-size: 21px;
-    margin-bottom: 4px;
+    font-size: 20px;
 }
 
-.nav-active {
-    color: #092646;
-    font-weight: 700;
-}
-
-/* =========================================
-   RESPONSIVE
-   ========================================= */
-
-@media (min-width: 600px) {
-
-    body {
-        padding: 30px 0;
-    }
-
-    .app {
-        min-height: calc(100vh - 60px);
-        border-radius: 28px;
-        overflow: hidden;
-        box-shadow: 0 15px 50px rgba(0,0,0,0.12);
-    }
-
-    .bottom-nav {
-        bottom: 30px;
-        border-radius: 0 0 28px 28px;
-    }
+.nav-label {
+    font-size: 11px;
+    font-weight: 600;
 }

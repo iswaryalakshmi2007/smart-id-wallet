@@ -1,681 +1,214 @@
-const API_URL = "http://localhost:5000";
-
-
 // =====================================================
-// STUDENT ID
-// =====================================================
-
-const studentId =
-    localStorage.getItem("studentId");
-
-
-if (!studentId) {
-
-    window.location.href =
-        "index.html";
-}
-
-
-// =====================================================
-// STORE TRANSACTIONS
+// SMART ID WALLET - TRANSACTION HISTORY CONTROLLER
 // =====================================================
 
 let allTransactions = [];
+let currentFilter = "ALL";
+const studentId = localStorage.getItem("studentId") || localStorage.getItem("userId");
 
+document.addEventListener("DOMContentLoaded", async () => {
+    if (!Auth.requireAuth("student")) return;
 
-// =====================================================
-// LOAD HISTORY
-// =====================================================
+    await loadWalletBalance();
+    await loadTransactions();
+});
 
-async function loadHistory() {
-
+async function loadWalletBalance() {
     try {
-
-        // ---------------------------------------------
-        // LOAD STUDENT
-        // ---------------------------------------------
-
-        const studentResponse =
-            await fetch(
-                API_URL +
-                "/api/student/" +
-                studentId
-            );
-
-
-        const student =
-            await studentResponse.json();
-
-
-        if (studentResponse.ok) {
-
-            const nameElement =
-                document.getElementById(
-                    "studentName"
-                );
-
-
-            const idElement =
-                document.getElementById(
-                    "studentId"
-                );
-
-
-            if (nameElement) {
-
-                nameElement.innerText =
-                    student.name || "Student";
-
-            }
-
-
-            if (idElement) {
-
-                idElement.innerText =
-                    student.student_id ||
-                    studentId;
-
-            }
-
+        const res = await apiRequest(`/api/wallet/${studentId}`);
+        if (res.ok && res.data) {
+            const bal = Number(res.data.balance) || 0;
+            const balEl = document.getElementById("summaryBalance");
+            if (balEl) balEl.innerText = formatCurrency(bal);
         }
-
-
-        // ---------------------------------------------
-        // LOAD BALANCE
-        // ---------------------------------------------
-
-        const walletResponse =
-            await fetch(
-                API_URL +
-                "/api/wallet/" +
-                studentId
-            );
-
-
-        const wallet =
-            await walletResponse.json();
-
-
-        if (walletResponse.ok) {
-
-            const balanceElement =
-                document.getElementById(
-                    "balance"
-                );
-
-
-            if (balanceElement) {
-
-                balanceElement.innerText =
-                    "₹" +
-                    Number(
-                        wallet.balance || 0
-                    ).toFixed(2);
-
-            }
-
-        }
-
-
-        // ---------------------------------------------
-        // LOAD TRANSACTIONS
-        // ---------------------------------------------
-
-        const transactionResponse =
-            await fetch(
-                API_URL +
-                "/api/transactions/" +
-                studentId
-            );
-
-
-        if (!transactionResponse.ok) {
-
-            throw new Error(
-                "Unable to load transactions"
-            );
-        }
-
-
-        allTransactions =
-            await transactionResponse.json();
-
-
-        updateTransactionCount(
-            allTransactions.length
-        );
-
-
-        displayTransactions(
-            allTransactions
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "History Error:",
-            error
-        );
-
-
-        const list =
-            document.getElementById(
-                "transactionList"
-            );
-
-
-        list.innerHTML = `
-
-            <div class="empty-state">
-
-                <div class="empty-icon">
-                    ⚠️
-                </div>
-
-                <h2>
-                    Unable to Load
-                </h2>
-
-                <p>
-                    Please make sure the
-                    Flask server is running.
-                </p>
-
-            </div>
-
-        `;
-
+    } catch (e) {
+        console.error("Error loading wallet balance:", e);
     }
 }
 
+async function loadTransactions() {
+    const listContainer = document.getElementById("transactionsList");
+    const countEl = document.getElementById("summaryCount");
+    const badgeEl = document.getElementById("listBadge");
 
-// =====================================================
-// DISPLAY TRANSACTIONS
-// =====================================================
+    try {
+        const res = await apiRequest(`/api/transactions/${studentId}`);
+        if (!res.ok || !Array.isArray(res.data)) {
+            listContainer.innerHTML = `<div class="empty-state">Failed to load transactions</div>`;
+            return;
+        }
 
-function displayTransactions(
-    transactions
-) {
+        allTransactions = res.data;
+        if (countEl) countEl.innerText = allTransactions.length;
+        renderTransactions();
 
-    const list =
-        document.getElementById(
-            "transactionList"
-        );
+    } catch (e) {
+        console.error("Error loading transactions:", e);
+        listContainer.innerHTML = `<div class="empty-state">Unable to load transactions</div>`;
+    }
+}
 
+function filterTransactions(filterType, btn) {
+    currentFilter = filterType;
+    document.querySelectorAll(".filter-tab").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderTransactions();
+}
 
-    const emptyState =
-        document.getElementById(
-            "emptyState"
-        );
+function renderTransactions() {
+    const listContainer = document.getElementById("transactionsList");
+    const badgeEl = document.getElementById("listBadge");
+    if (!listContainer) return;
 
+    let filtered = allTransactions;
+    if (currentFilter === "DEBIT") {
+        filtered = allTransactions.filter(t => t.transaction_type === "DEBIT" || t.transaction_type === "PURCHASE");
+    } else if (currentFilter === "CREDIT") {
+        filtered = allTransactions.filter(t => t.transaction_type === "WALLET_TOPUP" || t.transaction_type === "CREDIT");
+    }
 
-    list.innerHTML = "";
+    if (badgeEl) badgeEl.innerText = `${filtered.length} records`;
 
-
-    // ---------------------------------------------
-    // NO TRANSACTIONS
-    // ---------------------------------------------
-
-    if (
-        !transactions ||
-        transactions.length === 0
-    ) {
-
-        list.style.display =
-            "none";
-
-
-        emptyState.style.display =
-            "block";
-
-
+    if (filtered.length === 0) {
+        listContainer.innerHTML = `
+            <div class="empty-state">
+                <span>🔍</span>
+                <p style="margin-top:6px;">No transactions found for this filter.</p>
+            </div>
+        `;
         return;
     }
 
+    listContainer.innerHTML = filtered.map(t => {
+        const isCredit = t.transaction_type === "WALLET_TOPUP" || t.transaction_type === "CREDIT";
+        const icon = isCredit ? "💳" : (t.category === "Canteen" ? "🍽️" : t.category === "Printing" ? "🖨️" : "🛍️");
+        const sign = isCredit ? "+" : "-";
+        const amtClass = isCredit ? "credit" : "debit";
+        const title = t.description || (isCredit ? "Wallet Recharge" : `${t.category} Payment`);
+        const txnDisplayId = `TXN${10000 + (t.transaction_id || 1)}`;
 
-    list.style.display =
-        "block";
-
-
-    emptyState.style.display =
-        "none";
-
-
-    // ---------------------------------------------
-    // CREATE CARDS
-    // ---------------------------------------------
-
-    transactions.forEach(
-        transaction => {
-
-            const isCredit =
-                transaction.transaction_type
-                === "CREDIT";
-
-
-            const sign =
-                isCredit
-                ? "+"
-                : "-";
-
-
-            const icon =
-                getCategoryIcon(
-                    transaction.category,
-                    isCredit
-                );
-
-
-            const category =
-                transaction.category ||
-                "Wallet";
-
-
-            const description =
-                transaction.description ||
-                category;
-
-
-            const date =
-                transaction.created_at ||
-                transaction.transaction_date;
-
-
-            const formattedDate =
-                formatDateTime(
-                    date
-                );
-
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "transaction-card";
-
-
-            card.innerHTML = `
-
-                <div class="
-                    transaction-icon
-                    ${
-                        isCredit
-                        ? "credit-icon"
-                        : "debit-icon"
-                    }
-                ">
-
-                    ${icon}
-
-                </div>
-
-
-                <div class="transaction-info">
-
-                    <h3>
-                        ${escapeHTML(
-                            description
-                        )}
-                    </h3>
-
-
-                    <span class="category">
-
-                        ${escapeHTML(
-                            category
-                        )}
-
-                    </span>
-
-
-                    <span class="date">
-
-                        📅 ${formattedDate}
-
-                    </span>
-
-                </div>
-
-
-                <div class="transaction-amount">
-
-                    <div class="
-                        amount
-                        ${
-                            isCredit
-                            ? "credit"
-                            : "debit"
-                        }
-                    ">
-
-                        ${sign}₹${
-                            Number(
-                                transaction.amount || 0
-                            ).toFixed(2)
-                        }
-
+        return `
+            <div class="txn-row-card" onclick="viewTransactionDetail(${t.transaction_id})">
+                <div class="txn-main-left">
+                    <div class="txn-badge-icon ${amtClass}">
+                        <span>${icon}</span>
                     </div>
-
-
-                    <span class="status">
-
-                        ✓ ${
-                            transaction.status ||
-                            "SUCCESS"
-                        }
-
-                    </span>
-
+                    <div class="txn-title-meta">
+                        <h4>${escapeHtml(title)}</h4>
+                        ${t.shop_name ? `<span class="txn-shop-tag">🏪 ${escapeHtml(t.shop_name)}</span>` : ""}
+                        <span class="txn-date-sub">${formatDateTime(t.created_at || t.transaction_date)} • ${txnDisplayId}</span>
+                    </div>
                 </div>
-
-            `;
-
-
-            list.appendChild(
-                card
-            );
-
-        }
-    );
+                <div class="txn-main-right">
+                    <div class="txn-sum ${amtClass}">
+                        ${sign}${formatCurrency(t.amount)}
+                    </div>
+                    <span class="txn-status-dot">✓ SUCCESS</span>
+                </div>
+            </div>
+        `;
+    }).join("");
 }
 
+async function viewTransactionDetail(txnId) {
+    const modal = document.getElementById("detailModal");
+    const bodyEl = document.getElementById("modalReceiptBody");
+    if (!modal || !bodyEl) return;
 
-// =====================================================
-// FILTER
-// =====================================================
-
-function filterTransactions(
-    type,
-    button
-) {
-
-    // ---------------------------------------------
-    // UPDATE BUTTON
-    // ---------------------------------------------
-
-    document
-        .querySelectorAll(
-            ".filter-btn"
-        )
-        .forEach(
-            btn => {
-
-                btn.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-
-    button.classList.add(
-        "active"
-    );
-
-
-    // ---------------------------------------------
-    // FILTER DATA
-    // ---------------------------------------------
-
-    let filtered =
-        allTransactions;
-
-
-    if (type === "CREDIT") {
-
-        filtered =
-            allTransactions.filter(
-                transaction =>
-                    transaction.transaction_type
-                    === "CREDIT"
-            );
-
-    }
-
-
-    if (type === "DEBIT") {
-
-        filtered =
-            allTransactions.filter(
-                transaction =>
-                    transaction.transaction_type
-                    === "DEBIT"
-            );
-
-    }
-
-
-    updateTransactionCount(
-        filtered.length
-    );
-
-
-    displayTransactions(
-        filtered
-    );
-}
-
-
-// =====================================================
-// TRANSACTION COUNT
-// =====================================================
-
-function updateTransactionCount(
-    count
-) {
-
-    const element =
-        document.getElementById(
-            "transactionCount"
-        );
-
-
-    if (!element) return;
-
-
-    if (count === 1) {
-
-        element.innerText =
-            "1 transaction";
-
-    } else {
-
-        element.innerText =
-            count +
-            " transactions";
-    }
-}
-
-
-// =====================================================
-// CATEGORY ICON
-// =====================================================
-
-function getCategoryIcon(
-    category,
-    isCredit
-) {
-
-    if (isCredit) {
-
-        return "💰";
-    }
-
-
-    switch (category) {
-
-        case "Canteen":
-
-            return "🍽️";
-
-
-        case "Stationery":
-
-            return "📚";
-
-
-        case "Printing":
-
-            return "🖨️";
-
-
-        case "Other":
-
-            return "📦";
-
-
-        default:
-
-            return "💳";
-    }
-}
-
-
-// =====================================================
-// DATE + TIME
-// =====================================================
-
-function formatDateTime(
-    dateString
-) {
-
-    if (!dateString) {
-
-        return "Date unavailable";
-    }
-
+    bodyEl.innerHTML = `<div style="text-align:center; padding:20px;">Loading receipt details...</div>`;
+    modal.style.display = "flex";
 
     try {
-
-        let date =
-            new Date(
-                dateString
-            );
-
-
-        // SQLite compatibility
-        if (
-            isNaN(
-                date.getTime()
-            )
-        ) {
-
-            date =
-                new Date(
-                    dateString.replace(
-                        " ",
-                        "T"
-                    )
-                );
+        const res = await apiRequest(`/api/transaction/${txnId}`);
+        if (!res.ok || !res.data.success) {
+            bodyEl.innerHTML = `<div class="empty-state">Failed to load transaction details.</div>`;
+            return;
         }
 
+        const t = res.data.transaction;
+        const isCredit = t.transaction_type === "WALLET_TOPUP" || t.transaction_type === "CREDIT";
+        const displayId = `TXN${10000 + t.transaction_id}`;
 
-        if (
-            isNaN(
-                date.getTime()
-            )
-        ) {
-
-            return dateString;
+        let itemsHtml = "";
+        if (t.items && t.items.length > 0) {
+            itemsHtml = `
+                <div style="margin-top:14px;">
+                    <strong style="font-size:12px; text-transform:uppercase; color:#64748b;">Purchased Items:</strong>
+                    <div class="receipt-item-list">
+                        ${t.items.map(it => `
+                            <div class="receipt-item-line">
+                                <span>${escapeHtml(it.product_name_snapshot)} × ${it.quantity}</span>
+                                <strong>${formatCurrency(it.line_total)}</strong>
+                            </div>
+                        `).join("")}
+                    </div>
+                </div>
+            `;
         }
 
+        bodyEl.innerHTML = `
+            <div style="text-align:center; margin-bottom:16px;">
+                <div style="font-size:32px;">${isCredit ? "💳" : "🛍️"}</div>
+                <h2 style="font-size:24px; font-weight:800; color:${isCredit ? '#059669' : '#0f172a'}; margin-top:6px;">
+                    ${isCredit ? '+' : '-'}${formatCurrency(t.amount)}
+                </h2>
+                <span style="font-size:12px; color:#64748b;">${escapeHtml(t.description || t.transaction_type)}</span>
+            </div>
 
-        return date.toLocaleString(
-            "en-IN",
-            {
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:14px; font-size:12px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                    <span style="color:#64748b;">Transaction ID:</span>
+                    <strong>${displayId}</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                    <span style="color:#64748b;">Type:</span>
+                    <strong>${t.transaction_type}</strong>
+                </div>
+                ${t.shop_name ? `
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                    <span style="color:#64748b;">Shop:</span>
+                    <strong>${escapeHtml(t.shop_name)}</strong>
+                </div>` : ''}
+                ${t.wallet_before !== null && t.wallet_before !== undefined ? `
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                    <span style="color:#64748b;">Previous Wallet:</span>
+                    <span>${formatCurrency(t.wallet_before)}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                    <span style="color:#64748b;">Remaining Wallet:</span>
+                    <strong style="color:#0d9488;">${formatCurrency(t.wallet_after)}</strong>
+                </div>` : ''}
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                    <span style="color:#64748b;">Date & Time:</span>
+                    <span>${formatDateTime(t.created_at || t.transaction_date)}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                    <span style="color:#64748b;">Status:</span>
+                    <strong style="color:#059669;">✓ ${t.status}</strong>
+                </div>
+            </div>
 
-                day: "2-digit",
+            ${itemsHtml}
+        `;
 
-                month: "short",
-
-                year: "numeric",
-
-                hour: "2-digit",
-
-                minute: "2-digit",
-
-                second: "2-digit",
-
-                hour12: true
-
-            }
-        );
-
-
-    } catch (error) {
-
-        return dateString;
+    } catch (e) {
+        console.error("Error viewing transaction detail:", e);
+        bodyEl.innerHTML = `<div class="empty-state">Error loading transaction details.</div>`;
     }
 }
 
-
-// =====================================================
-// ESCAPE HTML
-// =====================================================
-
-function escapeHTML(
-    value
-) {
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-
-    div.innerText =
-        value;
-
-
-    return div.innerHTML;
+function closeDetailModal() {
+    const modal = document.getElementById("detailModal");
+    if (modal) modal.style.display = "none";
 }
 
-
-// =====================================================
-// NAVIGATION
-// =====================================================
-
-function goBack() {
-
-    window.location.href =
-        "dashboard.html";
+function escapeHtml(str) {
+    if (!str) return "";
+    return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+    }[tag] || tag));
 }
-
-
-function goHome() {
-
-    window.location.href =
-        "dashboard.html";
-}
-
-
-function viewID() {
-
-    window.location.href =
-        "my-id.html";
-}
-
-
-function profile() {
-
-    window.location.href =
-        "profile.html";
-}
-
-
-// =====================================================
-// START
-// =====================================================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        loadHistory();
-
-    }
-);

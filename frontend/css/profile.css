@@ -1,772 +1,288 @@
+/* =====================================================
+   SMART ID WALLET - PROFILE STYLES
+   ===================================================== */
+
+:root {
+    --primary: #0f172a;
+    --accent: #0d9488;
+    --accent-dark: #0f766e;
+    --accent-gradient: linear-gradient(135deg, #0d9488 0%, #0284c7 100%);
+    --bg-page: #f8fafc;
+    --card-bg: #ffffff;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
 body {
-
-    font-family:
-        "Segoe UI",
-        Arial,
-        sans-serif;
-
-    background:
-        linear-gradient(
-            135deg,
-            #eef4ff,
-            #f8faff
-        );
-
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #e2e8f0;
+    color: var(--text-dark);
     min-height: 100vh;
-
-    color: #172033;
 }
-
 
 .page {
+    width: 100%;
+    max-width: 500px;
     min-height: 100vh;
+    margin: 0 auto;
+    background: var(--bg-page);
+    position: relative;
+    padding-bottom: 95px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
 }
 
-
-/* =========================
-   HEADER
-========================= */
-
+/* HEADER */
 .header {
-
-    height: 80px;
-
-    background: white;
-
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    padding: 20px;
     display: flex;
-
     align-items: center;
-
-    padding: 0 7%;
-
-    gap: 18px;
-
-    box-shadow:
-        0 2px 15px rgba(0,0,0,0.06);
+    justify-content: space-between;
+    border-radius: 0 0 20px 20px;
 }
-
 
 .back-btn {
-
-    width: 45px;
-    height: 45px;
-
-    border: none;
-
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
-
-    background: #f1f5ff;
-
-    color: #315bea;
-
-    font-size: 24px;
-
+    color: #ffffff;
+    font-size: 20px;
     cursor: pointer;
-
-    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
 }
-
 
 .back-btn:hover {
-
-    background: #315bea;
-
-    color: white;
-
-    transform: translateX(-2px);
+    background: rgba(255, 255, 255, 0.25);
 }
-
 
 .header-title {
-    flex: 1;
+    text-align: center;
 }
-
 
 .header-title h1 {
-
-    font-size: 24px;
-
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 800;
 }
-
 
 .header-title p {
-
-    font-size: 13px;
-
-    color: #7b8497;
-
-    margin-top: 3px;
+    font-size: 11px;
+    color: #94a3b8;
 }
 
-
-.profile-header-icon {
-
-    width: 45px;
-    height: 45px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 12px;
-
-    background: #eef3ff;
-
+.header-icon {
     font-size: 22px;
 }
 
-
-/* =========================
-   MAIN
-========================= */
-
+/* PROFILE CONTAINER */
 .profile-container {
-
-    width: 100%;
-
-    max-width: 700px;
-
-    margin: 35px auto;
-
-    padding: 0 20px;
+    padding: 20px;
 }
 
-
-/* =========================
-   PROFILE CARD
-========================= */
-
-.profile-card {
-
-    background: white;
-
-    border-radius: 24px;
-
-    padding: 30px;
-
-    text-align: center;
-
-    box-shadow:
-        0 15px 45px rgba(34,55,100,0.10);
-}
-
-
-.profile-avatar {
-
-    width: 90px;
-    height: 90px;
-
-    margin: auto;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #4169e1,
-            #294ca8
-        );
-
-    font-size: 42px;
-
-    box-shadow:
-        0 10px 25px rgba(65,105,225,0.25);
-}
-
-
-.profile-card h2 {
-
-    margin-top: 15px;
-
-    font-size: 24px;
-}
-
-
-.profile-card p {
-
-    margin-top: 5px;
-
-    color: #7b8497;
-
-    font-size: 14px;
-}
-
-
-/* =========================
-   EDIT CARD
-========================= */
-
-.edit-card {
-
-    background: white;
-
-    margin-top: 18px;
-
+/* PROFILE HERO CARD */
+.profile-hero-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
     border-radius: 20px;
-
-    padding: 25px;
-
-    box-shadow:
-        0 10px 30px rgba(34,55,100,0.08);
-}
-
-
-.section-title {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
     margin-bottom: 20px;
 }
 
-
-.section-title span {
-
-    font-size: 20px;
+.avatar-large {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 12px;
+    background: #e2e8f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    border: 3px solid #cbd5e1;
 }
 
+.profile-hero-card h2 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-dark);
+}
 
-.section-title h3 {
+.profile-id-tag {
+    display: inline-block;
+    background: #f0fdfa;
+    color: #0f766e;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid #ccfbf1;
+    margin-top: 4px;
+}
 
+.profile-dept-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+/* FORM CARDS */
+.form-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.card-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.card-title-row span {
     font-size: 18px;
 }
 
-
-/* =========================
-   INPUT
-========================= */
+.card-title-row h3 {
+    font-size: 14px;
+    font-weight: 700;
+}
 
 .input-group {
-
-    margin-bottom: 17px;
+    margin-bottom: 14px;
 }
-
 
 .input-group label {
-
     display: block;
-
-    font-size: 13px;
-
-    font-weight: 600;
-
-    color: #384257;
-
-    margin-bottom: 7px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
 }
-
 
 .input-group input {
-
     width: 100%;
-
-    height: 50px;
-
-    border: 2px solid #e5e9f2;
-
+    height: 46px;
+    border: 1.5px solid var(--border-color);
     border-radius: 12px;
-
     padding: 0 14px;
-
-    font-size: 14px;
-
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text-dark);
     outline: none;
-
-    color: #172033;
-
-    transition: 0.2s;
+    transition: all 0.2s;
 }
-
 
 .input-group input:focus {
-
-    border-color: #4169e1;
-
-    box-shadow:
-        0 0 0 4px rgba(65,105,225,0.08);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
 }
 
-
-/* =========================
-   SAVE BUTTON
-========================= */
-
-.save-btn {
-
+.submit-btn {
     width: 100%;
-
-    height: 54px;
-
+    height: 46px;
+    background: var(--accent-gradient);
+    color: #ffffff;
     border: none;
-
-    border-radius: 13px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #4169e1,
-            #3154c9
-        );
-
-    color: white;
-
-    font-size: 15px;
-
+    border-radius: 12px;
+    font-size: 14px;
     font-weight: 700;
-
+    font-family: inherit;
     cursor: pointer;
-
-    transition: 0.2s;
-
-    box-shadow:
-        0 8px 20px rgba(65,105,225,0.22);
+    margin-top: 6px;
+    transition: opacity 0.2s;
 }
 
-
-.save-btn:hover {
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 12px 25px rgba(65,105,225,0.28);
+.submit-btn:hover {
+    opacity: 0.92;
 }
 
-
-/* =========================
-   DETAILS
-========================= */
-
-.details-card {
-
-    background: white;
-
-    margin-top: 18px;
-
-    border-radius: 20px;
-
-    padding: 25px;
-
-    box-shadow:
-        0 10px 30px rgba(34,55,100,0.08);
+.submit-btn.secondary {
+    background: var(--primary);
 }
 
-
-.detail-row {
-
+/* LOGOUT BUTTON */
+.logout-btn {
+    width: 100%;
+    height: 48px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
     display: flex;
-
-    align-items: center;
-
-    gap: 14px;
-
-    padding: 16px 0;
-
-    border-bottom:
-        1px solid #edf0f5;
-}
-
-
-.detail-row:last-child {
-
-    border-bottom: none;
-
-    padding-bottom: 5px;
-}
-
-
-.detail-icon {
-
-    width: 42px;
-    height: 42px;
-
-    flex-shrink: 0;
-
-    display: flex;
-
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    transition: all 0.15s;
+}
 
-    border-radius: 12px;
+.logout-btn:hover {
+    background: #fee2e2;
+}
 
-    background: #f1f5ff;
+/* BOTTOM NAV */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+}
 
+.nav-item {
+    background: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 16px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.2s;
+}
+
+.nav-item.active {
+    color: #0d9488;
+}
+
+.nav-icon {
     font-size: 20px;
 }
 
-
-.detail-info {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 4px;
-
-    min-width: 0;
-}
-
-
-.detail-info .label {
-
-    font-size: 12px;
-
-    color: #8a94a7;
-}
-
-
-.detail-info strong {
-
-    font-size: 14px;
-
-    color: #26334d;
-
-    word-break: break-word;
-}
-
-
-/* =========================
-   WALLET
-========================= */
-
-.wallet-card {
-
-    margin-top: 18px;
-
-    padding: 22px 25px;
-
-    border-radius: 20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #182b66,
-            #294ca8
-        );
-
-    color: white;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    box-shadow:
-        0 10px 30px rgba(30,55,120,0.20);
-}
-
-
-.wallet-left {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
-}
-
-
-.wallet-icon {
-
-    width: 50px;
-    height: 50px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 14px;
-
-    background:
-        rgba(255,255,255,0.12);
-
-    font-size: 25px;
-}
-
-
-.wallet-left span {
-
-    font-size: 13px;
-
-    opacity: 0.8;
-}
-
-
-.wallet-left h2 {
-
-    margin-top: 4px;
-
-    font-size: 25px;
-}
-
-
-.wallet-arrow {
-
-    font-size: 25px;
-
-    opacity: 0.7;
-}
-
-
-/* =========================
-   OPTIONS
-========================= */
-
-.options-card {
-
-    margin-top: 18px;
-
-    background: white;
-
-    border-radius: 20px;
-
-    padding: 5px;
-
-    box-shadow:
-        0 10px 30px rgba(34,55,100,0.08);
-}
-
-
-.option-btn {
-
-    width: 100%;
-
-    border: none;
-
-    background: transparent;
-
-    padding: 16px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 14px;
-
-    cursor: pointer;
-
-    text-align: left;
-
-    border-radius: 15px;
-
-    transition: 0.2s;
-}
-
-
-.option-btn:hover {
-    background: #f5f7ff;
-}
-
-
-.option-icon {
-
-    width: 45px;
-    height: 45px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    background: #eef3ff;
-
-    border-radius: 12px;
-
-    font-size: 21px;
-}
-
-
-.option-text {
-
-    flex: 1;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 4px;
-}
-
-
-.option-text strong {
-    font-size: 14px;
-}
-
-
-.option-text span {
-
-    font-size: 12px;
-
-    color: #8a94a7;
-}
-
-
-.arrow {
-
-    font-size: 25px;
-
-    color: #9aa3b5;
-}
-
-
-/* =========================
-   LOGOUT
-========================= */
-
-.logout-btn {
-
-    width: 100%;
-
-    height: 52px;
-
-    margin-top: 18px;
-
-    border: 1px solid #ffd7d7;
-
-    border-radius: 14px;
-
-    background: #fff6f6;
-
-    color: #d93636;
-
-    font-size: 15px;
-
+.nav-label {
+    font-size: 11px;
     font-weight: 600;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-
-.logout-btn:hover {
-
-    background: #ffeaea;
-
-    transform: translateY(-1px);
-}
-
-
-/* =========================
-   DASHBOARD
-========================= */
-
-.dashboard-btn {
-
-    width: 100%;
-
-    height: 50px;
-
-    margin-top: 12px;
-
-    border: none;
-
-    border-radius: 14px;
-
-    background: #4169e1;
-
-    color: white;
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-
-.dashboard-btn:hover {
-
-    background: #3154c9;
-
-    transform: translateY(-1px);
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 600px) {
-
-    .header {
-
-        height: 70px;
-
-        padding: 0 18px;
-    }
-
-
-    .header-title h1 {
-        font-size: 20px;
-    }
-
-
-    .profile-container {
-
-        margin: 20px auto;
-
-        padding: 0 14px;
-    }
-
-
-    .profile-card {
-
-        padding: 25px 18px;
-
-        border-radius: 20px;
-    }
-
-
-    .edit-card,
-    .details-card {
-
-        padding: 20px 17px;
-    }
-
-
-    .profile-avatar {
-
-        width: 80px;
-        height: 80px;
-
-        font-size: 36px;
-    }
-
-
-    .profile-card h2 {
-        font-size: 21px;
-    }
-
-
-    .detail-info strong {
-        font-size: 13px;
-    }
-
-
-    .wallet-card {
-        padding: 20px;
-    }
-
 }

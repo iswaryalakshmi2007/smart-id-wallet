@@ -1,1030 +1,141 @@
-const API_URL = "http://localhost:5000";
-
-
 // =====================================================
-// LOGGED-IN STUDENT
+// SMART ID WALLET - STUDENT DASHBOARD CONTROLLER
 // =====================================================
 
-const studentId =
-    localStorage.getItem("studentId");
+document.addEventListener("DOMContentLoaded", async () => {
+    // 1. Validate session & student role
+    if (!Auth.requireAuth("student")) return;
 
+    const studentId = localStorage.getItem("studentId") || localStorage.getItem("userId");
+    if (!studentId) {
+        window.location.href = "index.html";
+        return;
+    }
 
-if (!studentId) {
+    // 2. Load dashboard data
+    await loadStudentData(studentId);
+    await loadWalletData(studentId);
+    await loadRecentTransactions(studentId);
+});
 
-    window.location.href =
-        "index.html";
-}
-
-
-// =====================================================
-// LOAD DASHBOARD
-// =====================================================
-
-async function loadDashboard() {
-
+async function loadStudentData(studentId) {
     try {
-
-        // ---------------------------------------------
-        // STUDENT DETAILS
-        // ---------------------------------------------
-
-        const studentResponse =
-            await fetch(
-                API_URL +
-                "/api/student/" +
-                studentId
-            );
-
-
-        if (!studentResponse.ok) {
-
-            throw new Error(
-                "Unable to load student"
-            );
-        }
-
-
-        const student =
-            await studentResponse.json();
-
-
-        const nameElement =
-            document.getElementById(
-                "studentName"
-            );
-
-        const idElement =
-            document.getElementById(
-                "studentId"
-            );
-
-        const departmentElement =
-            document.getElementById(
-                "department"
-            );
-
-        const academicYearElement =
-            document.getElementById(
-                "academicYear"
-            );
-
-
-        if (nameElement) {
-
-            nameElement.innerText =
-                student.name || "Student";
-        }
-
-
-        if (idElement) {
-
-            idElement.innerText =
-                student.student_id || studentId;
-        }
-
-
-        if (departmentElement) {
-
-            departmentElement.innerText =
-                student.department || "-";
-        }
-
-
-        if (academicYearElement) {
-
-            academicYearElement.innerText =
-                student.academic_year || "-";
-        }
-
-
-        // ---------------------------------------------
-        // WALLET
-        // ---------------------------------------------
-
-        const walletResponse =
-            await fetch(
-                API_URL +
-                "/api/wallet/" +
-                studentId
-            );
-
-
-        if (!walletResponse.ok) {
-
-            throw new Error(
-                "Unable to load wallet"
-            );
-        }
-
-
-        const wallet =
-            await walletResponse.json();
-
-
-        const balance =
-            Number(wallet.balance || 0);
-
-
-        const limit =
-            Number(
-                wallet.low_balance_limit || 100
-            );
-
-
-        const balanceElement =
-            document.getElementById(
-                "balance"
-            );
-
-
-        if (balanceElement) {
-
-            balanceElement.innerText =
-                "₹" +
-                balance.toFixed(2);
-        }
-
-
-        // ---------------------------------------------
-        // LOW BALANCE
-        // ---------------------------------------------
-
-        checkLowBalance(
-            balance,
-            limit
-        );
-
-
-        // ---------------------------------------------
-        // RECENT TRANSACTIONS
-        // ---------------------------------------------
-
-        await loadRecentTransactions();
-
-
-    } catch (error) {
-
-        console.error(
-            "Dashboard Error:",
-            error
-        );
-
-
-        alert(
-            "Unable to load dashboard. " +
-            "Please check whether Flask server is running."
-        );
-    }
-}
-
-
-// =====================================================
-// ADD MONEY
-// =====================================================
-
-async function addMoney() {
-
-    const amount =
-        prompt(
-            "Enter amount to add:"
-        );
-
-
-    // User cancelled
-    if (amount === null) {
-
-        return;
-    }
-
-
-    const value =
-        parseFloat(
-            amount
-        );
-
-
-    // Validate
-    if (
-        isNaN(value) ||
-        value <= 0
-    ) {
-
-        alert(
-            "Please enter a valid amount."
-        );
-
-        return;
-    }
-
-
-    try {
-
-        const response =
-            await fetch(
-                API_URL +
-                "/api/wallet/add-money",
-                {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        studentId:
-                            studentId,
-
-                        amount:
-                            value
-
-                    })
-
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            alert(
-                result.message ||
-                "Unable to add money."
-            );
-
-            return;
-        }
-
-
-        alert(
-            "Money Added Successfully! 💰\n\n" +
-
-            "Added Amount: ₹" +
-            value.toFixed(2) +
-
-            "\nNew Balance: ₹" +
-            Number(
-                result.balance
-            ).toFixed(2)
-        );
-
-
-        // Refresh dashboard
-        await loadDashboard();
-
-
-    } catch (error) {
-
-        console.error(
-            "Add Money Error:",
-            error
-        );
-
-
-        alert(
-            "Unable to connect to server."
-        );
-    }
-}
-
-
-// =====================================================
-// SCAN & PAY
-// =====================================================
-
-async function scanPay() {
-
-    // ---------------------------------------------
-    // CATEGORY SELECTION
-    // ---------------------------------------------
-
-    const categoryInput =
-        prompt(
-            "SELECT PAYMENT CATEGORY\n\n" +
-
-            "1. 🍽️ Canteen\n" +
-
-            "2. 📚 Stationery\n" +
-
-            "3. 🖨️ Printing\n" +
-
-            "4. 📦 Other\n\n" +
-
-            "Enter option (1-4):"
-        );
-
-
-    if (categoryInput === null) {
-
-        return;
-    }
-
-
-    const categories = {
-
-        "1": "Canteen",
-
-        "2": "Stationery",
-
-        "3": "Printing",
-
-        "4": "Other"
-
-    };
-
-
-    const selected =
-        categories[
-            categoryInput.trim()
-        ];
-
-
-    if (!selected) {
-
-        alert(
-            "Please select a valid category."
-        );
-
-        return;
-    }
-
-
-    // ---------------------------------------------
-    // AMOUNT
-    // ---------------------------------------------
-
-    const amount =
-        prompt(
-            "Enter " +
-            selected +
-            " payment amount:"
-        );
-
-
-    if (amount === null) {
-
-        return;
-    }
-
-
-    const value =
-        parseFloat(
-            amount
-        );
-
-
-    if (
-        isNaN(value) ||
-        value <= 0
-    ) {
-
-        alert(
-            "Please enter a valid amount."
-        );
-
-        return;
-    }
-
-
-    // ---------------------------------------------
-    // DESCRIPTION
-    // ---------------------------------------------
-
-    const description =
-        prompt(
-            "Enter description:",
-            selected
-        );
-
-
-    if (
-        description === null
-    ) {
-
-        return;
-    }
-
-
-    const finalDescription =
-        description.trim() ||
-        selected;
-
-
-    // ---------------------------------------------
-    // CONFIRM PAYMENT
-    // ---------------------------------------------
-
-    const confirmPayment =
-        confirm(
-
-            "CONFIRM PAYMENT\n\n" +
-
-            "Category: " +
-            selected +
-
-            "\nAmount: ₹" +
-            value.toFixed(2) +
-
-            "\nDescription: " +
-            finalDescription +
-
-            "\n\nDo you want to continue?"
-
-        );
-
-
-    if (!confirmPayment) {
-
-        return;
-    }
-
-
-    // ---------------------------------------------
-    // SEND PAYMENT TO BACKEND
-    // ---------------------------------------------
-
-    try {
-
-        const response =
-            await fetch(
-                API_URL +
-                "/api/wallet/pay",
-                {
-
-                    method: "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json"
-
-                    },
-
-                    body: JSON.stringify({
-
-                        studentId:
-                            studentId,
-
-                        amount:
-                            value,
-
-                        category:
-                            selected,
-
-                        description:
-                            finalDescription
-
-                    })
-
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        // ---------------------------------------------
-        // PAYMENT FAILED
-        // ---------------------------------------------
-
-        if (!response.ok) {
-
-            alert(
-
-                result.message ||
-                "Payment failed."
-
-            );
-
-            return;
-        }
-
-
-        // ---------------------------------------------
-        // PAYMENT SUCCESS
-        // ---------------------------------------------
-
-        alert(
-
-            "Payment Successful! ✅\n\n" +
-
-            "Category: " +
-            selected +
-
-            "\nAmount: ₹" +
-            value.toFixed(2) +
-
-            "\nNew Balance: ₹" +
-            Number(
-                result.balance
-            ).toFixed(2)
-
-        );
-
-
-        // Refresh dashboard
-        await loadDashboard();
-
-
-    } catch (error) {
-
-        console.error(
-            "Payment Error:",
-            error
-        );
-
-
-        alert(
-            "Payment failed. " +
-            "Please check the server."
-        );
-    }
-}
-
-
-// =====================================================
-// RECENT TRANSACTIONS
-// =====================================================
-
-async function loadRecentTransactions() {
-
-    const container =
-        document.getElementById(
-            "recentTransactions"
-        );
-
-
-    if (!container) {
-
-        return;
-    }
-
-
-    try {
-
-        const response =
-            await fetch(
-                API_URL +
-                "/api/transactions/" +
-                studentId
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Unable to load transactions"
-            );
-        }
-
-
-        const transactions =
-            await response.json();
-
-
-        container.innerHTML = "";
-
-
-        // ---------------------------------------------
-        // NO TRANSACTIONS
-        // ---------------------------------------------
-
-        if (
-            !transactions ||
-            transactions.length === 0
-        ) {
-
-            container.innerHTML = `
-
-                <div class="empty-state">
-
-                    <div class="empty-icon">
-                        💳
-                    </div>
-
-                    <h3>
-                        No transactions yet
-                    </h3>
-
-                    <p>
-                        Your wallet activity
-                        will appear here.
-                    </p>
-
-                </div>
-
-            `;
-
-            return;
-        }
-
-
-        // ---------------------------------------------
-        // SHOW LAST 5
-        // ---------------------------------------------
-
-        transactions
-            .slice(0, 5)
-            .forEach(
-                transaction => {
-
-                    const isCredit =
-                        transaction.transaction_type
-                        === "CREDIT";
-
-
-                    const sign =
-                        isCredit
-                        ? "+"
-                        : "-";
-
-
-                    // ---------------------------------
-                    // CATEGORY ICON
-                    // ---------------------------------
-
-                    let icon = "💳";
-
-
-                    if (
-                        transaction.category
-                        === "Canteen"
-                    ) {
-
-                        icon = "🍽️";
-
-                    } else if (
-                        transaction.category
-                        === "Stationery"
-                    ) {
-
-                        icon = "📚";
-
-                    } else if (
-                        transaction.category
-                        === "Printing"
-                    ) {
-
-                        icon = "🖨️";
-
-                    } else if (
-                        transaction.category
-                        === "WALLET_RECHARGE"
-                    ) {
-
-                        icon = "💰";
-
-                    } else if (
-                        transaction.category
-                        === "Other"
-                    ) {
-
-                        icon = "📦";
-                    }
-
-
-                    // ---------------------------------
-                    // DATE / TIME
-                    // ---------------------------------
-
-                    const dateTime =
-                        transaction.created_at ||
-                        transaction.transaction_date;
-
-
-                    const formattedDate =
-                        formatDateTime(
-                            dateTime
-                        );
-
-
-                    // ---------------------------------
-                    // CREATE ITEM
-                    // ---------------------------------
-
-                    const item =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    item.className =
-                        "transaction-item";
-
-
-                    item.innerHTML = `
-
-                        <div class="transaction-icon">
-
-                            ${icon}
-
-                        </div>
-
-
-                        <div class="transaction-info">
-
-                            <strong>
-
-                                ${
-                                    transaction.description ||
-                                    transaction.category ||
-                                    "Transaction"
-                                }
-
-                            </strong>
-
-
-                            <small>
-
-                                ${
-                                    transaction.category ||
-                                    "Wallet"
-                                }
-
-                            </small>
-
-
-                            <small class="transaction-date">
-
-                                📅 ${formattedDate}
-
-                            </small>
-
-                        </div>
-
-
-                        <div class="${
-                            isCredit
-                            ? "credit"
-                            : "debit"
-                        }">
-
-                            ${sign}₹${
-                                Number(
-                                    transaction.amount
-                                ).toFixed(2)
-                            }
-
-                        </div>
-
-                    `;
-
-
-                    container.appendChild(
-                        item
-                    );
-
-                }
-            );
-
-
-    } catch (error) {
-
-        console.error(
-            "Transaction Error:",
-            error
-        );
-
-
-        container.innerHTML = `
-
-            <div class="empty-state">
-
-                <div class="empty-icon">
-                    ⚠️
-                </div>
-
-                <h3>
-                    Unable to load transactions
-                </h3>
-
-                <p>
-                    Please try again later.
-                </p>
-
-            </div>
-
-        `;
-    }
-}
-
-
-// =====================================================
-// FORMAT DATE + TIME
-// =====================================================
-
-function formatDateTime(
-    dateString
-) {
-
-    if (!dateString) {
-
-        return "Date unavailable";
-    }
-
-
-    try {
-
-        let date =
-            new Date(
-                dateString
-            );
-
-
-        // SQLite format compatibility
-        if (
-            isNaN(
-                date.getTime()
-            )
-        ) {
-
-            date =
-                new Date(
-                    dateString.replace(
-                        " ",
-                        "T"
-                    )
-                );
-        }
-
-
-        if (
-            isNaN(
-                date.getTime()
-            )
-        ) {
-
-            return dateString;
-        }
-
-
-        return date.toLocaleString(
-            "en-IN",
-            {
-
-                day: "2-digit",
-
-                month: "short",
-
-                year: "numeric",
-
-                hour: "2-digit",
-
-                minute: "2-digit",
-
-                second: "2-digit",
-
-                hour12: true
-
+        const res = await apiRequest(`/api/student/${studentId}`);
+        if (res.ok && res.data) {
+            const student = res.data;
+            const nameEl = document.getElementById("studentName");
+            const idEl = document.getElementById("studentId");
+            const deptEl = document.getElementById("department");
+            const yearEl = document.getElementById("academicYear");
+            const badgeEl = document.getElementById("studentStatusBadge");
+
+            if (nameEl) nameEl.innerText = student.name || "Student";
+            if (idEl) idEl.innerText = student.student_id || studentId;
+            if (deptEl) deptEl.innerText = student.department || "--";
+            if (yearEl) yearEl.innerText = student.academic_year || "--";
+            if (badgeEl) {
+                badgeEl.innerText = student.status || "ACTIVE";
+                badgeEl.className = `status-badge ${student.status === "ACTIVE" ? "active" : "inactive"}`;
             }
-        );
-
-
-    } catch (error) {
-
-        return dateString;
+        }
+    } catch (e) {
+        console.error("Error loading student profile:", e);
     }
 }
 
+async function loadWalletData(studentId) {
+    try {
+        const res = await apiRequest(`/api/wallet/${studentId}`);
+        if (res.ok && res.data) {
+            const wallet = res.data;
+            const balance = Number(wallet.balance) || 0;
+            const limit = Number(wallet.low_balance_limit) || CONFIG.DEFAULT_LOW_BALANCE_LIMIT;
 
-// =====================================================
-// LOW BALANCE ALERT
-// =====================================================
+            const balEl = document.getElementById("balance");
+            if (balEl) balEl.innerText = formatCurrency(balance);
 
-function checkLowBalance(
-    balance,
-    limit
-) {
+            const syncEl = document.getElementById("lastSyncTime");
+            if (syncEl) syncEl.innerText = "Synced: " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-    const alertBox =
-        document.getElementById(
-            "lowBalanceAlert"
-        );
-
-
-    if (!alertBox) {
-
-        return;
-    }
-
-
-    if (
-        balance <= limit
-    ) {
-
-        alertBox.style.display =
-            "block";
-
-
-        alertBox.innerHTML = `
-
-            🔔
-            <strong>
-                Low Balance
-            </strong>
-
-            <br>
-
-            Your wallet balance is
-            ₹${balance.toFixed(2)}.
-
-        `;
-
-    } else {
-
-        alertBox.style.display =
-            "none";
+            // Low Balance Alert handling
+            const alertBox = document.getElementById("lowBalanceAlert");
+            const alertText = document.getElementById("lowBalanceText");
+            if (alertBox) {
+                if (balance <= limit) {
+                    alertBox.style.display = "flex";
+                    if (alertText) {
+                        alertText.innerText = `Balance is ${formatCurrency(balance)} (below ${formatCurrency(limit)}). Add funds to continue campus shopping.`;
+                    }
+                } else {
+                    alertBox.style.display = "none";
+                }
+            }
+        }
+    } catch (e) {
+        console.error("Error loading wallet balance:", e);
     }
 }
 
+async function loadRecentTransactions(studentId) {
+    const listEl = document.getElementById("recentTransactions");
+    if (!listEl) return;
 
-// =====================================================
-// MY ID
-// =====================================================
+    try {
+        const res = await apiRequest(`/api/transactions/${studentId}`);
+        if (!res.ok || !Array.isArray(res.data)) {
+            listEl.innerHTML = `<div class="empty-state">Unable to load transactions</div>`;
+            return;
+        }
 
-function viewID() {
+        const txns = res.data.slice(0, 5); // Latest 5 transactions
+        if (txns.length === 0) {
+            listEl.innerHTML = `
+                <div class="empty-state">
+                    <span>🧾</span>
+                    <p style="margin-top:6px;">No transactions yet. Add money or make a purchase!</p>
+                </div>
+            `;
+            return;
+        }
 
-    window.location.href =
-        "my-id.html";
-}
+        listEl.innerHTML = txns.map(t => {
+            const isCredit = t.transaction_type === "WALLET_TOPUP" || t.transaction_type === "CREDIT";
+            const icon = isCredit ? "💳" : (t.category === "Canteen" ? "🍽️" : t.category === "Printing" ? "🖨️" : "🛍️");
+            const sign = isCredit ? "+" : "-";
+            const amtClass = isCredit ? "credit" : "debit";
+            const title = t.description || (isCredit ? "Wallet Recharge" : `${t.category} Purchase`);
 
+            return `
+                <div class="txn-card" onclick="window.location.href='history.html'">
+                    <div class="txn-left">
+                        <div class="txn-icon-box ${amtClass}">
+                            <span>${icon}</span>
+                        </div>
+                        <div class="txn-info">
+                            <h4>${escapeHtml(title)}</h4>
+                            <span class="txn-date">${formatDateTime(t.created_at || t.transaction_date)}</span>
+                        </div>
+                    </div>
+                    <div class="txn-amount ${amtClass}">
+                        ${sign}${formatCurrency(t.amount)}
+                    </div>
+                </div>
+            `;
+        }).join("");
 
-// =====================================================
-// TRANSACTIONS
-// =====================================================
-
-function viewTransactions() {
-
-    window.location.href =
-        "history.html";
-}
-
-
-// =====================================================
-// PROFILE
-// =====================================================
-
-function profile() {
-
-    window.location.href =
-        "profile.html";
-}
-
-
-// =====================================================
-// HOME
-// =====================================================
-
-function goHome() {
-
-    window.location.href =
-        "dashboard.html";
-}
-
-
-// =====================================================
-// LOGOUT
-// =====================================================
-
-function logout() {
-
-    const confirmLogout =
-        confirm(
-            "Are you sure you want to logout?"
-        );
-
-
-    if (!confirmLogout) {
-
-        return;
+    } catch (e) {
+        console.error("Error loading transactions:", e);
+        listEl.innerHTML = `<div class="empty-state">Error loading recent transactions</div>`;
     }
-
-
-    localStorage.removeItem(
-        "studentId"
-    );
-
-
-    window.location.href =
-        "index.html";
 }
 
-
-// =====================================================
-// START DASHBOARD
-// =====================================================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        loadDashboard();
-
-    }
-);
+function escapeHtml(str) {
+    if (!str) return "";
+    return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+    }[tag] || tag));
+}

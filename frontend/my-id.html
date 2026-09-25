@@ -2,149 +2,118 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>My College ID - Smart ID Wallet</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My College Digital ID - Smart ID Wallet</title>
     <link rel="stylesheet" href="css/my-id.css">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<div class="id-page">
+    <div class="page">
 
-    <header class="id-header">
+        <!-- HEADER -->
+        <header class="header">
+            <button type="button" class="back-btn" onclick="window.location.href='dashboard.html'" aria-label="Back">
+                ←
+            </button>
+            <div class="header-title">
+                <h1>Digital Student ID</h1>
+                <p>Campus Smart Identity</p>
+            </div>
+            <div class="header-icon">🪪</div>
+        </header>
 
-        <button onclick="goBack()" class="back-btn">
-            ←
-        </button>
+        <main class="id-container">
 
-        <div>
-            <h1>My College ID</h1>
-            <p>Smart Digital Identity</p>
-        </div>
+            <!-- THE DIGITAL ID CARD -->
+            <section class="college-id-card" id="digitalIdCard">
 
-    </header>
-
-
-    <main>
-
-        <section class="college-id-card">
-
-            <div class="card-top">
-
-                <div>
-                    <p class="college-name">
-                        SMART COLLEGE
-                    </p>
-
-                    <p class="card-title">
-                        STUDENT IDENTITY CARD
-                    </p>
+                <!-- CARD TOP BRANDING -->
+                <div class="card-header">
+                    <div class="college-crest">🎓</div>
+                    <div class="college-text">
+                        <h3 class="college-title">SMART COLLEGE OF ENGINEERING</h3>
+                        <p class="card-subtitle">STUDENT IDENTITY CARD & WALLET</p>
+                    </div>
                 </div>
 
-                <div class="card-logo">
-                    🎓
+                <!-- PHOTO & STUDENT DETAILS -->
+                <div class="student-profile-row">
+                    <div class="student-photo-box">
+                        <span class="photo-icon">👤</span>
+                        <span class="verified-dot" title="Verified Student">✓</span>
+                    </div>
+
+                    <div class="student-meta-details">
+                        <h2 class="student-name" id="idStudentName">Student Name</h2>
+                        <div class="meta-field">
+                            <span class="label">STUDENT ID:</span>
+                            <strong class="val highlight" id="idStudentId">--</strong>
+                        </div>
+                        <div class="meta-field">
+                            <span class="label">DEPARTMENT:</span>
+                            <span class="val" id="idDepartment">--</span>
+                        </div>
+                        <div class="meta-field">
+                            <span class="label">BATCH:</span>
+                            <span class="val" id="idAcademicYear">--</span>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- QR CODE SECTION (REAL DYNAMIC QR CODE) -->
+                <div class="qr-code-section">
+                    <div class="qr-frame" id="qrcodeContainer">
+                        <!-- Generated Canvas QR code inserted by js/my-id.js -->
+                    </div>
+                    <p class="qr-caption">Scan QR or Barcode at Campus Shops</p>
+                </div>
+
+                <!-- BARCODE SECTION -->
+                <div class="barcode-container">
+                    <div class="barcode-visual">
+                        ||| | |||| | ||| || |||| | || ||| |||| | || | |||
+                    </div>
+                    <span class="barcode-text" id="barcodeString">--</span>
+                </div>
+
+                <!-- CARD FOOTER -->
+                <div class="card-footer-strip">
+                    <span>OFFICIAL DIGITAL CREDENTIAL</span>
+                    <span>VALID 2025–2029</span>
+                </div>
+
+            </section>
+
+            <!-- ACTION BUTTONS -->
+            <div class="id-action-buttons">
+                <button type="button" class="btn-action" onclick="copyStudentId()">
+                    <span>📋</span> Copy Student ID
+                </button>
+                <button type="button" class="btn-action primary" onclick="window.location.href='dashboard.html'">
+                    <span>🏠</span> Back to Dashboard
+                </button>
             </div>
 
-
-            <div class="student-section">
-
-                <div class="student-photo">
-                    👤
-                </div>
-
-
-                <div class="student-details">
-
-                    <h2 id="studentName">
-                        Student
-                    </h2>
-
-                    <p>
-                        <strong>Student ID</strong>
-                        <span id="studentId">--</span>
-                    </p>
-
-                    <p>
-                        <strong>Department</strong>
-                        <span id="department">--</span>
-                    </p>
-
-                    <p>
-                        <strong>Academic Year</strong>
-                        <span id="academicYear">--</span>
-                    </p>
-
-                </div>
-
+            <!-- USAGE GUIDELINES -->
+            <div class="usage-note">
+                <strong>💡 How to use your Digital ID:</strong>
+                <p>Present this screen to any campus shopkeeper (Canteen, General Store, Printing, or Stationery). The shopkeeper scans this QR code or enters your Student ID to process instant wallet payments.</p>
             </div>
 
+        </main>
 
-            <div class="barcode">
+    </div>
 
-                <div class="barcode-lines">
-                    || ||| || |||| | ||| || || ||
-                </div>
-
-                <span id="barcodeId">
-                    --
-                </span>
-
-            </div>
-
-        </section>
-
-
-        <div class="id-info">
-
-            <div class="info-box">
-
-                <span>🔐</span>
-
-                <div>
-                    <strong>Digital ID</strong>
-                    <p>Your college identity is securely stored.</p>
-                </div>
-
-            </div>
-
-
-            <div class="info-box">
-
-                <span>📱</span>
-
-                <div>
-                    <strong>Smart Wallet</strong>
-                    <p>Use your student ID with your digital wallet.</p>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <button
-            class="dashboard-btn"
-            onclick="goBack()">
-
-            ← Back to Dashboard
-
-        </button>
-
-    </main>
-
-</div>
-
-
-<script src="js/my-id.js"></script>
+    <!-- SCRIPTS -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/qrcode.min.js"></script>
+    <script src="js/my-id.js"></script>
 
 </body>
 

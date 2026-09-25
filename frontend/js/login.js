@@ -1,317 +1,181 @@
-// ==========================================
-// SMART ID WALLET - LOGIN
-// ==========================================
+// =====================================================
+// SMART ID WALLET - MULTI-ROLE LOGIN CONTROLLER
+// =====================================================
 
-const API_URL = "http://localhost:5000";
+let currentRole = "student";
 
+// Role configuration mappings
+const roleConfigs = {
+    student: {
+        label: "Student ID",
+        placeholder: "Enter Student ID (e.g. 23ECE001)",
+        icon: "🎓",
+        btnText: "Sign In as Student",
+        demoId: "23ECE001",
+        demoPass: "123456"
+    },
+    shopkeeper: {
+        label: "Shopkeeper ID / Email",
+        placeholder: "Enter Shopkeeper ID (e.g. shop01)",
+        icon: "🏪",
+        btnText: "Sign In as Shopkeeper",
+        demoId: "shop01",
+        demoPass: "123456"
+    },
+    admin: {
+        label: "Admin Username",
+        placeholder: "Enter Admin Username (e.g. admin01)",
+        icon: "🛡️",
+        btnText: "Sign In as Administrator",
+        demoId: "admin01",
+        demoPass: "admin123"
+    }
+};
 
-// ==========================================
-// LOGIN
-// ==========================================
+function switchRole(role) {
+    if (!roleConfigs[role]) return;
+    currentRole = role;
 
-async function login() {
+    // Update active tab buttons
+    document.querySelectorAll(".role-tab").forEach(tab => {
+        tab.classList.remove("active");
+    });
+    const activeTab = document.getElementById(`tab-${role}`);
+    if (activeTab) activeTab.classList.add("active");
 
-    const studentIdInput =
-        document.getElementById("studentId");
+    // Update form labels & icons
+    const config = roleConfigs[role];
+    const idLabel = document.getElementById("idLabel");
+    const idIcon = document.getElementById("idIcon");
+    const loginIdInput = document.getElementById("loginId");
+    const btnText = document.getElementById("btnText");
 
-    const passwordInput =
-        document.getElementById("password");
+    if (idLabel) idLabel.innerText = config.label;
+    if (idIcon) idIcon.innerText = config.icon;
+    if (loginIdInput) {
+        loginIdInput.placeholder = config.placeholder;
+        loginIdInput.value = "";
+    }
+    if (btnText) btnText.innerText = config.btnText;
 
-    const message =
-        document.getElementById("message");
+    const passwordInput = document.getElementById("password");
+    if (passwordInput) passwordInput.value = "";
 
-    const loginButton =
-        document.querySelector(".login-btn");
+    hideMessage();
+}
 
+function fillDemo(role) {
+    switchRole(role);
+    const config = roleConfigs[role];
+    const loginIdInput = document.getElementById("loginId");
+    const passwordInput = document.getElementById("password");
 
-    // Get values
-    const studentId =
-        studentIdInput.value
-            .trim()
-            .toUpperCase();
+    if (loginIdInput) loginIdInput.value = config.demoId;
+    if (passwordInput) passwordInput.value = config.demoPass;
 
-    const password =
-        passwordInput.value.trim();
+    showMessage(`Demo credentials loaded for ${role.toUpperCase()}`, "success");
+}
 
+function togglePasswordVisibility() {
+    const passField = document.getElementById("password");
+    const toggleBtn = document.getElementById("passwordToggleBtn");
+    if (!passField) return;
 
-    // Clear previous message
-    message.innerText = "";
+    if (passField.type === "password") {
+        passField.type = "text";
+        if (toggleBtn) toggleBtn.innerText = "🙈";
+    } else {
+        passField.type = "password";
+        if (toggleBtn) toggleBtn.innerText = "👁️";
+    }
+}
 
+async function handleLogin() {
+    const loginIdInput = document.getElementById("loginId");
+    const passwordInput = document.getElementById("password");
+    const loginBtn = document.getElementById("loginButton");
+    const btnSpinner = document.getElementById("btnSpinner");
+    const btnText = document.getElementById("btnText");
 
-    // ======================================
-    // VALIDATION
-    // ======================================
+    const loginId = loginIdInput ? loginIdInput.value.trim() : "";
+    const password = passwordInput ? passwordInput.value.trim() : "";
 
-    if (studentId === "") {
+    hideMessage();
 
-        message.innerText =
-            "Please enter your Student ID.";
-
-        studentIdInput.focus();
-
+    if (!loginId) {
+        showMessage(`Please enter your ${roleConfigs[currentRole].label}`, "error");
+        if (loginIdInput) loginIdInput.focus();
         return;
     }
 
-
-    if (password === "") {
-
-        message.innerText =
-            "Please enter your password.";
-
-        passwordInput.focus();
-
+    if (!password) {
+        showMessage("Please enter your password", "error");
+        if (passwordInput) passwordInput.focus();
         return;
     }
 
-
-    // ======================================
-    // STUDENT ID FORMAT CHECK
-    // Example: 25EC060
-    // Example: 25AD101
-    // Example: 25ME120
-    // ======================================
-
-    const studentIdPattern =
-        /^[0-9]{2}[A-Z]{2,4}[0-9]{3}$/;
-
-
-    if (!studentIdPattern.test(studentId)) {
-
-        message.innerText =
-            "Enter a valid Student ID.\nExample: 25EC060";
-
-        studentIdInput.focus();
-
-        return;
-    }
-
-
-    // ======================================
-    // LOADING
-    // ======================================
-
-    if (loginButton) {
-
-        loginButton.disabled = true;
-
-        loginButton.innerText =
-            "Logging in...";
-    }
-
+    // UI Loading state
+    if (loginBtn) loginBtn.disabled = true;
+    if (btnSpinner) btnSpinner.style.display = "inline-block";
 
     try {
+        const res = await apiRequest("/api/auth/login", {
+            method: "POST",
+            body: JSON.stringify({
+                loginId: loginId,
+                password: password,
+                role: currentRole
+            })
+        });
 
-        // ==================================
-        // SEND LOGIN REQUEST
-        // ==================================
-
-        const response = await fetch(
-            API_URL + "/api/login",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-
-                    studentId: studentId,
-
-                    password: password
-
-                })
-            }
-        );
-
-
-        // ==================================
-        // READ RESPONSE
-        // ==================================
-
-        const result =
-            await response.json();
-
-
-        // ==================================
-        // LOGIN FAILED
-        // ==================================
-
-        if (!response.ok) {
-
-            message.innerText =
-                result.message ||
-                "Invalid Student ID or Password.";
-
-            if (loginButton) {
-
-                loginButton.disabled = false;
-
-                loginButton.innerText =
-                    "Login";
-            }
-
+        if (!res.ok || !res.data.success) {
+            const errorMsg = res.data.message || "Invalid ID or password.";
+            showMessage(errorMsg, "error");
             return;
         }
 
+        // Authentication Success
+        showMessage("Login successful! Redirecting...", "success");
+        Auth.setSession(res.data.user, res.data.token);
 
-        // ==================================
-        // LOGIN SUCCESS
-        // ==================================
+        // Redirect based on backend response or role
+        setTimeout(() => {
+            const dest = res.data.redirect || (
+                currentRole === "admin" ? "admin/index.html" :
+                currentRole === "shopkeeper" ? "shopkeeper/index.html" : "dashboard.html"
+            );
+            window.location.href = dest;
+        }, 500);
 
-        const loggedInStudentId =
-            result.studentId || studentId;
-
-
-        // Save student ID
-        localStorage.setItem(
-            "studentId",
-            loggedInStudentId
-        );
-
-
-        // Save login status
-        localStorage.setItem(
-            "isLoggedIn",
-            "true"
-        );
-
-
-        // ==================================
-        // OPEN DASHBOARD
-        // ==================================
-
-        window.location.href =
-            "dashboard.html";
-
-
-    } catch (error) {
-
-        console.error(
-            "Login Error:",
-            error
-        );
-
-
-        message.innerText =
-            "Cannot connect to server.\n" +
-            "Please make sure the Python backend is running.";
-
-
-        if (loginButton) {
-
-            loginButton.disabled = false;
-
-            loginButton.innerText =
-                "Login";
-        }
+    } catch (err) {
+        console.error("Login exception:", err);
+        showMessage("Network error. Unable to reach server.", "error");
+    } finally {
+        if (loginBtn) loginBtn.disabled = false;
+        if (btnSpinner) btnSpinner.style.display = "none";
     }
 }
 
+function showMessage(msg, type = "error") {
+    const msgBox = document.getElementById("loginMessage");
+    if (!msgBox) return;
+    msgBox.innerText = msg;
+    msgBox.className = `login-message ${type}`;
+    msgBox.style.display = "block";
+}
 
-// ==========================================
-// SHOW / HIDE PASSWORD
-// ==========================================
+function hideMessage() {
+    const msgBox = document.getElementById("loginMessage");
+    if (msgBox) msgBox.style.display = "none";
+}
 
-function togglePassword() {
-
-    const password =
-        document.getElementById("password");
-
-    const toggle =
-        document.getElementById("passwordToggle");
-
-
-    if (!password || !toggle) {
-        return;
-    }
-
-
-    if (password.type === "password") {
-
-        password.type = "text";
-
-        toggle.innerText = "🙈";
-
-        toggle.title = "Hide Password";
-
+// Auto-select tab based on URL param or default
+document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roleParam = urlParams.get("role");
+    if (roleParam && roleConfigs[roleParam]) {
+        switchRole(roleParam);
     } else {
-
-        password.type = "password";
-
-        toggle.innerText = "👁️";
-
-        toggle.title = "Show Password";
+        switchRole("student");
     }
-}
-
-
-// ==========================================
-// FORGOT PASSWORD
-// ==========================================
-
-function forgotPassword(event) {
-
-    if (event) {
-        event.preventDefault();
-    }
-
-
-    alert(
-        "Forgot your password?\n\n" +
-        "Please contact your college administrator " +
-        "to reset your Smart ID Wallet password."
-    );
-}
-
-
-// ==========================================
-// ENTER KEY LOGIN
-// ==========================================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        const studentId =
-            document.getElementById("studentId");
-
-        const password =
-            document.getElementById("password");
-
-
-        // Student ID → uppercase automatically
-
-        if (studentId) {
-
-            studentId.addEventListener(
-                "input",
-                function () {
-
-                    this.value =
-                        this.value.toUpperCase();
-                }
-            );
-        }
-
-
-        // Press ENTER → Login
-
-        if (password) {
-
-            password.addEventListener(
-                "keydown",
-                function (event) {
-
-                    if (event.key === "Enter") {
-
-                        event.preventDefault();
-
-                        login();
-                    }
-                }
-            );
-        }
-
-    }
-);
+});

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrator Portal | Smart ID Wallet</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon">🛡️</div>
+                <div class="brand-text">
+                    <h2>Smart ID Wallet</h2>
+                    <span class="brand-badge">ADMIN CONSOLE</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button type="button" class="nav-link-btn active" id="tab-dashboard" onclick="switchAdminTab('dashboard')">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Dashboard</span>
+                </button>
+                <button type="button" class="nav-link-btn" id="tab-students" onclick="switchAdminTab('students')">
+                    <span class="nav-icon">🎓</span>
+                    <span class="nav-label">Students</span>
+                </button>
+                <button type="button" class="nav-link-btn" id="tab-shopkeepers" onclick="switchAdminTab('shopkeepers')">
+                    <span class="nav-icon">🏪</span>
+                    <span class="nav-label">Shopkeepers</span>
+                </button>
+                <button type="button" class="nav-link-btn" id="tab-products" onclick="switchAdminTab('products')">
+                    <span class="nav-icon">🏷️</span>
+                    <span class="nav-label">Products</span>
+                </button>
+                <button type="button" class="nav-link-btn" id="tab-transactions" onclick="switchAdminTab('transactions')">
+                    <span class="nav-icon">🧾</span>
+                    <span class="nav-label">Transactions</span>
+                </button>
+                <button type="button" class="nav-link-btn" id="tab-reports" onclick="switchAdminTab('reports')">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-label">Reports</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-mini">
+                    <div class="user-avatar-mini">👤</div>
+                    <div class="user-details-mini">
+                        <strong id="adminName">Administrator</strong>
+                        <small id="adminUsername">admin01</small>
+                    </div>
+                </div>
+                <button type="button" class="logout-icon-btn" onclick="Auth.logout()" title="Sign Out">
+                    🚪
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="admin-main">
+
+            <!-- TOPBAR -->
+            <header class="admin-topbar">
+                <div class="topbar-title">
+                    <h1 id="pageHeading">System Overview</h1>
+                    <p id="pageSubHeading">Real-time ledger statistics, student wallets, and merchant accounts</p>
+                </div>
+                <div class="topbar-actions" id="topbarActions">
+                    <button type="button" class="btn-secondary" onclick="refreshCurrentTab()">
+                        🔄 Refresh Data
+                    </button>
+                </div>
+            </header>
+
+            <!-- ============================================== -->
+            <!-- TAB 1: DASHBOARD -->
+            <!-- ============================================== -->
+            <div id="section-dashboard" class="tab-section">
+                <!-- KPIS -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-teal">🎓</div>
+                        <div class="kpi-details">
+                            <span class="kpi-label">Total Students</span>
+                            <strong class="kpi-number" id="dashTotalStudents">0</strong>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-sky">🏪</div>
+                        <div class="kpi-details">
+                            <span class="kpi-label">Active Shopkeepers</span>
+                            <strong class="kpi-number" id="dashTotalShopkeepers">0</strong>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-emerald">💳</div>
+                        <div class="kpi-details">
+                            <span class="kpi-label">Total Wallet Balance</span>
+                            <strong class="kpi-number" id="dashTotalBalance">₹0.00</strong>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-amber">⚡</div>
+                        <div class="kpi-details">
+                            <span class="kpi-label">Today's Sales</span>
+                            <strong class="kpi-number" id="dashTodaySales">₹0.00</strong>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-purple">🏷️</div>
+                        <div class="kpi-details">
+                            <span class="kpi-label">Active Products</span>
+                            <strong class="kpi-number" id="dashTotalProducts">0</strong>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-rose">🧾</div>
+                        <div class="kpi-details">
+                            <span class="kpi-label">Today's Transactions</span>
+                            <strong class="kpi-number" id="dashTodayTxns">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RECENT TRANSACTIONS TABLE -->
+                <div class="content-panel">
+                    <div class="panel-header-row">
+                        <h3>⚡ Recent Transactions (Live Ledger)</h3>
+                        <button type="button" class="btn-secondary" onclick="switchAdminTab('transactions')">View All Ledger Records →</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Txn ID</th>
+                                    <th>Student</th>
+                                    <th>Merchant / Source</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Date & Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashRecentTxnsBody">
+                                <tr><td colspan="8" style="text-align:center; padding:20px; color:#94a3b8;">Loading transactions...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- TAB 2: STUDENTS MANAGEMENT -->
+            <!-- ============================================== -->
+            <div id="section-students" class="tab-section" style="display: none;">
+                <div class="content-panel">
+                    <div class="panel-header-row">
+                        <div class="filter-bar">
+                            <div class="search-input-wrap">
+                                <span class="search-icon-inside">🔍</span>
+                                <input type="text" id="studentSearchInput" placeholder="Search by ID, name, email..." oninput="debounceStudentSearch()">
+                            </div>
+                            <select id="studentStatusFilter" class="filter-select" onchange="loadStudents()">
+                                <option value="">All Statuses</option>
+                                <option value="ACTIVE">Active</option>
+                                <option value="INACTIVE">Inactive</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn-primary" onclick="openAddStudentModal()">
+                            + Add New Student
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Full Name</th>
+                                    <th>Department</th>
+                                    <th>Batch Year</th>
+                                    <th>Email</th>
+                                    <th>Wallet Balance</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody">
+                                <tr><td colspan="8" style="text-align:center; padding:20px;">Loading students...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- TAB 3: SHOPKEEPERS MANAGEMENT -->
+            <!-- ============================================== -->
+            <div id="section-shopkeepers" class="tab-section" style="display: none;">
+                <div class="content-panel">
+                    <div class="panel-header-row">
+                        <h3>🏪 Campus Shopkeepers & Counters</h3>
+                        <button type="button" class="btn-primary" onclick="openAddShopkeeperModal()">
+                            + Add New Shopkeeper
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Shopkeeper ID</th>
+                                    <th>Operator Name</th>
+                                    <th>Shop Name</th>
+                                    <th>Category</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="shopkeepersTableBody">
+                                <tr><td colspan="7" style="text-align:center; padding:20px;">Loading shopkeepers...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- TAB 4: PRODUCTS MANAGEMENT -->
+            <!-- ============================================== -->
+            <div id="section-products" class="tab-section" style="display: none;">
+                <div class="content-panel">
+                    <div class="panel-header-row">
+                        <div class="filter-bar">
+                            <div class="search-input-wrap">
+                                <span class="search-icon-inside">🔍</span>
+                                <input type="text" id="productSearchInput" placeholder="Search products..." oninput="filterProductsTable()">
+                            </div>
+                        </div>
+                        <button type="button" class="btn-primary" onclick="openAddProductModal()">
+                            + Add New Product
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Product Name</th>
+                                    <th>Shop</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Active</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTableBody">
+                                <tr><td colspan="8" style="text-align:center; padding:20px;">Loading products...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- TAB 5: TRANSACTIONS AUDIT LEDGER -->
+            <!-- ============================================== -->
+            <div id="section-transactions" class="tab-section" style="display: none;">
+                <div class="content-panel">
+                    <div class="panel-header-row">
+                        <div class="filter-bar">
+                            <div class="search-input-wrap">
+                                <span class="search-icon-inside">🔍</span>
+                                <input type="text" id="txnStudentFilter" placeholder="Filter Student ID..." onchange="loadAdminTransactions()">
+                            </div>
+                            <select id="txnTypeFilter" class="filter-select" onchange="loadAdminTransactions()">
+                                <option value="">All Types</option>
+                                <option value="PURCHASE">Purchases</option>
+                                <option value="WALLET_TOPUP">Top-ups</option>
+                                <option value="DEBIT">Direct Payments</option>
+                            </select>
+                            <select id="txnStatusFilter" class="filter-select" onchange="loadAdminTransactions()">
+                                <option value="">All Statuses</option>
+                                <option value="SUCCESS">Success</option>
+                                <option value="FAILED">Failed</option>
+                            </select>
+                            <button type="button" class="btn-secondary" onclick="resetTxnFilters()">Reset</button>
+                        </div>
+                        <span id="txnTotalCountBadge" style="color:#94a3b8; font-size:13px;">0 records</span>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Txn ID</th>
+                                    <th>Student</th>
+                                    <th>Merchant</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Balance (Before → After)</th>
+                                    <th>Status</th>
+                                    <th>Date & Time</th>
+                                    <th>Audit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionsTableBody">
+                                <tr><td colspan="9" style="text-align:center; padding:20px;">Loading transaction records...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- TAB 6: REPORTS & ANALYTICS -->
+            <!-- ============================================== -->
+            <div id="section-reports" class="tab-section" style="display: none;">
+                <!-- FINANCIAL OVERVIEW CARDS -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-emerald">💳</div>
+                        <div class="kpi-details">
+                            <span class="kpi-label">Total Top-ups Verified</span>
+                            <strong class="kpi-number" id="repTotalTopups">₹0.00</strong>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-teal">🛍️</div>
+                        <div class="kpi-details">
+                            <span class="kpi-label">Total Purchases Executed</span>
+                            <strong class="kpi-number" id="repTotalPurchases">₹0.00</strong>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-sky">🧾</div>
+                        <div class="kpi-details">
+                            <span class="kpi-label">Successful Transactions</span>
+                            <strong class="kpi-number" id="repTotalTxns">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reports-grid">
+                    <!-- TOP PRODUCTS -->
+                    <div class="report-box">
+                        <h4>🏆 Top Selling Products (By Volume)</h4>
+                        <div id="repTopProductsList">
+                            <p style="color:#94a3b8; font-size:13px;">Loading product statistics...</p>
+                        </div>
+                    </div>
+
+                    <!-- TOP SHOPS -->
+                    <div class="report-box">
+                        <h4>🏪 Top Performing Shops</h4>
+                        <div id="repTopShopsList">
+                            <p style="color:#94a3b8; font-size:13px;">Loading shop performance...</p>
+                        </div>
+                    </div>
+
+                    <!-- DAILY SALES BREAKDOWN -->
+                    <div class="report-box" style="grid-column: 1 / -1;">
+                        <h4>📅 Recent Daily Sales Activity</h4>
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Purchases Executed</th>
+                                        <th>Total Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="repDailySalesBody">
+                                    <tr><td colspan="3" style="text-align:center;">Loading daily trends...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODALS -->
+    <!-- ============================================== -->
+
+    <!-- 1. ADD STUDENT MODAL -->
+    <div class="admin-modal" id="modalAddStudent" style="display: none;">
+        <div class="modal-backdrop" onclick="closeModal('modalAddStudent')"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Add New Student</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modalAddStudent')">✕</button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitAddStudent();">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="asStudentId">Student ID *</label>
+                            <input type="text" id="asStudentId" class="form-control" placeholder="e.g. 25CS001" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="asName">Full Name *</label>
+                            <input type="text" id="asName" class="form-control" placeholder="Student name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="asDepartment">Department</label>
+                            <input type="text" id="asDepartment" class="form-control" placeholder="e.g. CSE, ECE" value="ECE">
+                        </div>
+                        <div class="form-group">
+                            <label for="asAcademicYear">Academic Batch</label>
+                            <input type="text" id="asAcademicYear" class="form-control" placeholder="e.g. 2025-2029" value="2025-2029">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="asEmail">Email Address</label>
+                        <input type="email" id="asEmail" class="form-control" placeholder="student@campus.edu">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="asPassword">Initial Password</label>
+                            <input type="password" id="asPassword" class="form-control" placeholder="Default: 123456" value="123456">
+                        </div>
+                        <div class="form-group">
+                            <label for="asBalance">Initial Balance (₹)</label>
+                            <input type="number" id="asBalance" class="form-control" min="0" step="10" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modalAddStudent')">Cancel</button>
+                    <button type="submit" class="btn-primary" id="btnSubmitAddStudent">Save Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. EDIT STUDENT MODAL -->
+    <div class="admin-modal" id="modalEditStudent" style="display: none;">
+        <div class="modal-backdrop" onclick="closeModal('modalEditStudent')"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Edit Student Details</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modalEditStudent')">✕</button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitEditStudent();">
+                <input type="hidden" id="esStudentId">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Student ID</label>
+                        <input type="text" id="esStudentIdDisplay" class="form-control" readonly style="opacity:0.7;">
+                    </div>
+                    <div class="form-group">
+                        <label for="esName">Full Name *</label>
+                        <input type="text" id="esName" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="esDepartment">Department</label>
+                            <input type="text" id="esDepartment" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="esAcademicYear">Academic Batch</label>
+                            <input type="text" id="esAcademicYear" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="esEmail">Email Address</label>
+                        <input type="email" id="esEmail" class="form-control">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="esBalance">Wallet Balance (₹)</label>
+                            <input type="number" id="esBalance" class="form-control" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="esStatus">Status</label>
+                            <select id="esStatus" class="form-control">
+                                <option value="ACTIVE">ACTIVE</option>
+                                <option value="INACTIVE">INACTIVE</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modalEditStudent')">Cancel</button>
+                    <button type="submit" class="btn-primary" id="btnSubmitEditStudent">Update Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. ADD SHOPKEEPER MODAL -->
+    <div class="admin-modal" id="modalAddShopkeeper" style="display: none;">
+        <div class="modal-backdrop" onclick="closeModal('modalAddShopkeeper')"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Add New Shopkeeper</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modalAddShopkeeper')">✕</button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitAddShopkeeper();">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="askId">Shopkeeper ID *</label>
+                            <input type="text" id="askId" class="form-control" placeholder="e.g. shop05" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="askName">Operator Name *</label>
+                            <input type="text" id="askName" class="form-control" placeholder="Name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="askShopName">Shop / Counter Name *</label>
+                            <input type="text" id="askShopName" class="form-control" placeholder="e.g. Campus Bakery" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="askCategory">Category</label>
+                            <input type="text" id="askCategory" class="form-control" placeholder="e.g. Canteen, Stationery" value="General Store">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="askEmail">Email Address</label>
+                        <input type="email" id="askEmail" class="form-control" placeholder="shop@campus.edu">
+                    </div>
+                    <div class="form-group">
+                        <label for="askPassword">Initial Password</label>
+                        <input type="password" id="askPassword" class="form-control" placeholder="Default: 123456" value="123456">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modalAddShopkeeper')">Cancel</button>
+                    <button type="submit" class="btn-primary" id="btnSubmitAddShopkeeper">Create Shopkeeper</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. EDIT SHOPKEEPER MODAL -->
+    <div class="admin-modal" id="modalEditShopkeeper" style="display: none;">
+        <div class="modal-backdrop" onclick="closeModal('modalEditShopkeeper')"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Edit Shopkeeper</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modalEditShopkeeper')">✕</button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitEditShopkeeper();">
+                <input type="hidden" id="eskId">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Shopkeeper ID</label>
+                        <input type="text" id="eskIdDisplay" class="form-control" readonly style="opacity:0.7;">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eskName">Operator Name *</label>
+                            <input type="text" id="eskName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eskShopName">Shop Name *</label>
+                            <input type="text" id="eskShopName" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eskCategory">Category</label>
+                            <input type="text" id="eskCategory" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="eskStatus">Status</label>
+                            <select id="eskStatus" class="form-control">
+                                <option value="ACTIVE">ACTIVE</option>
+                                <option value="INACTIVE">INACTIVE</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="eskEmail">Email</label>
+                        <input type="email" id="eskEmail" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modalEditShopkeeper')">Cancel</button>
+                    <button type="submit" class="btn-primary" id="btnSubmitEditShopkeeper">Update Shopkeeper</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 5. ADD PRODUCT MODAL -->
+    <div class="admin-modal" id="modalAddProduct" style="display: none;">
+        <div class="modal-backdrop" onclick="closeModal('modalAddProduct')"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Add New Product</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modalAddProduct')">✕</button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitAddProduct();">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="apShopkeeper">Assign To Shopkeeper / Merchant *</label>
+                        <select id="apShopkeeper" class="form-control" required>
+                            <!-- Dynamically loaded -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="apName">Product Name *</label>
+                        <input type="text" id="apName" class="form-control" placeholder="e.g. Spiral Notebook" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="apCategory">Category</label>
+                            <input type="text" id="apCategory" class="form-control" placeholder="Stationery, Canteen..." value="General">
+                        </div>
+                        <div class="form-group">
+                            <label for="apPrice">Price (₹) *</label>
+                            <input type="number" id="apPrice" class="form-control" min="0.5" step="0.5" placeholder="0.00" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modalAddProduct')">Cancel</button>
+                    <button type="submit" class="btn-primary" id="btnSubmitAddProduct">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 6. EDIT PRODUCT MODAL -->
+    <div class="admin-modal" id="modalEditProduct" style="display: none;">
+        <div class="modal-backdrop" onclick="closeModal('modalEditProduct')"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Edit Product & Price</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modalEditProduct')">✕</button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitEditProduct();">
+                <input type="hidden" id="epProductId">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="epName">Product Name *</label>
+                        <input type="text" id="epName" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="epCategory">Category</label>
+                            <input type="text" id="epCategory" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="epPrice">Price (₹) *</label>
+                            <input type="number" id="epPrice" class="form-control" min="0.5" step="0.5" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="epStockStatus">Stock Status</label>
+                            <select id="epStockStatus" class="form-control">
+                                <option value="IN_STOCK">IN_STOCK</option>
+                                <option value="OUT_OF_STOCK">OUT_OF_STOCK</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="epActive">Active</label>
+                            <select id="epActive" class="form-control">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <small style="color:#94a3b8; font-size:11px;">Notice: Changing product price only impacts future purchases. Historical ledger snapshots remain immutable.</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modalEditProduct')">Cancel</button>
+                    <button type="submit" class="btn-primary" id="btnSubmitEditProduct">Update Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 7. DETAILED TRANSACTION AUDIT RECEIPT MODAL -->
+    <div class="admin-modal" id="modalTxnDetail" style="display: none;">
+        <div class="modal-backdrop" onclick="closeModal('modalTxnDetail')"></div>
+        <div class="modal-dialog modal-dialog-large">
+            <div class="modal-header">
+                <h3>Transaction Audit Inspection</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modalTxnDetail')">✕</button>
+            </div>
+            <div class="modal-body" id="txnDetailBody">
+                <div style="text-align:center; padding:20px;">Loading transaction details...</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('modalTxnDetail')">Close Inspection</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="admin.js"></script>
+
+</body>
+
+</html>

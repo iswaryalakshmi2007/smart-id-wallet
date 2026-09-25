@@ -1,3 +1,17 @@
+/* =====================================================
+   SMART ID WALLET - DIGITAL ID CARD STYLES
+   ===================================================== */
+
+:root {
+    --primary: #0f172a;
+    --card-gradient: linear-gradient(135deg, #09203f 0%, #537895 100%);
+    --bg-page: #f8fafc;
+    --card-bg: #ffffff;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,188 +19,328 @@
 }
 
 body {
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: #f4f7fb;
-    color: #172033;
-}
-
-.id-page {
-    max-width: 480px;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #e2e8f0;
+    color: var(--text-dark);
     min-height: 100vh;
-    margin: auto;
-    background: white;
-    padding-bottom: 30px;
 }
 
-.id-header {
-    background: linear-gradient(135deg, #092646, #164e7a);
-    color: white;
-    padding: 22px;
+.page {
+    width: 100%;
+    max-width: 500px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: var(--bg-page);
+    position: relative;
+    padding-bottom: 40px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+}
+
+/* HEADER */
+.header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    padding: 20px;
     display: flex;
     align-items: center;
-    gap: 15px;
-    border-radius: 0 0 24px 24px;
-}
-
-.id-header h1 {
-    font-size: 23px;
-}
-
-.id-header p {
-    font-size: 13px;
-    opacity: 0.75;
-    margin-top: 4px;
+    justify-content: space-between;
+    border-radius: 0 0 20px 20px;
 }
 
 .back-btn {
-    width: 42px;
-    height: 42px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    color: white;
-    font-size: 23px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 20px;
     cursor: pointer;
-}
-
-main {
-    padding: 25px 20px;
-}
-
-.college-id-card {
-    background: linear-gradient(145deg, #0a2948, #17608c);
-    color: white;
-    border-radius: 24px;
-    padding: 22px;
-    box-shadow: 0 15px 35px rgba(9,38,70,0.22);
-}
-
-.card-top {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding-bottom: 18px;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    justify-content: center;
+    transition: all 0.2s;
 }
 
-.college-name {
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.header-title {
+    text-align: center;
+}
+
+.header-title h1 {
+    font-size: 18px;
     font-weight: 800;
-    font-size: 17px;
 }
 
-.card-title {
-    font-size: 10px;
-    opacity: 0.7;
-    margin-top: 4px;
-    letter-spacing: 1px;
+.header-title p {
+    font-size: 11px;
+    color: #94a3b8;
 }
 
-.card-logo {
-    font-size: 30px;
+.header-icon {
+    font-size: 22px;
 }
 
-.student-section {
+/* ID CONTAINER */
+.id-container {
+    padding: 24px 20px;
+}
+
+/* COLLEGE ID CARD */
+.college-id-card {
+    background: #ffffff;
+    border: 2px solid #0f172a;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15);
+    position: relative;
+}
+
+/* CARD TOP BRANDING */
+.card-header {
+    background: linear-gradient(135deg, #09203f 0%, #1e3a8a 100%);
+    color: #ffffff;
+    padding: 16px;
     display: flex;
-    gap: 18px;
-    padding: 25px 0;
+    align-items: center;
+    gap: 12px;
 }
 
-.student-photo {
-    width: 85px;
-    height: 100px;
-    background: white;
-    color: #64748b;
+.college-crest {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 38px;
+    font-size: 24px;
 }
 
-.student-details {
+.college-title {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.card-subtitle {
+    font-size: 10px;
+    color: #93c5fd;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* STUDENT PROFILE ROW */
+.student-profile-row {
+    display: flex;
+    gap: 16px;
+    padding: 20px 18px 16px;
+    align-items: center;
+}
+
+.student-photo-box {
+    width: 90px;
+    height: 105px;
+    background: #e2e8f0;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.photo-icon {
+    font-size: 44px;
+    color: #64748b;
+}
+
+.verified-dot {
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+    width: 22px;
+    height: 22px;
+    background: #10b981;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.student-meta-details {
     flex: 1;
 }
 
-.student-details h2 {
-    font-size: 20px;
-    margin-bottom: 13px;
+.student-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 8px;
 }
 
-.student-details p {
-    font-size: 12px;
-    margin: 7px 0;
+.meta-field {
+    display: flex;
+    font-size: 11px;
+    margin-bottom: 4px;
+    gap: 6px;
+}
+
+.meta-field .label {
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 90px;
+}
+
+.meta-field .val {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.meta-field .val.highlight {
+    color: #0d9488;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+
+/* QR CODE SECTION */
+.qr-code-section {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 18px;
+    background: #f8fafc;
+    border-top: 1px dashed var(--border-color);
+    border-bottom: 1px dashed var(--border-color);
 }
 
-.student-details strong {
-    font-size: 9px;
-    text-transform: uppercase;
-    opacity: 0.6;
-}
-
-.barcode {
-    background: white;
-    color: #172033;
-    border-radius: 12px;
-    padding: 12px;
-    text-align: center;
-}
-
-.barcode-lines {
-    font-size: 22px;
-    letter-spacing: 2px;
-    overflow: hidden;
-}
-
-.barcode span {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-}
-
-.id-info {
-    margin-top: 22px;
-}
-
-.info-box {
-    display: flex;
-    gap: 14px;
-    padding: 17px;
-    margin-bottom: 12px;
-    background: #f7f9fc;
-    border: 1px solid #e8edf3;
-    border-radius: 16px;
-}
-
-.info-box > span {
-    font-size: 23px;
-}
-
-.info-box strong {
-    font-size: 14px;
-}
-
-.info-box p {
-    font-size: 12px;
-    color: #7b8798;
-    margin-top: 4px;
-}
-
-.dashboard-btn {
-    width: 100%;
-    padding: 15px;
-    border: none;
+.qr-frame {
+    background: #ffffff;
+    padding: 10px;
+    border: 2px solid #e2e8f0;
     border-radius: 14px;
-    background: #092646;
-    color: white;
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.qr-frame canvas {
+    display: block;
+    border-radius: 4px;
+}
+
+.qr-caption {
+    font-size: 11px;
     font-weight: 600;
-    cursor: pointer;
+    color: var(--text-muted);
     margin-top: 8px;
 }
 
-.dashboard-btn:hover {
-    background: #164e7a;
+/* BARCODE SECTION */
+.barcode-container {
+    text-align: center;
+    padding: 14px;
+    background: #ffffff;
+}
+
+.barcode-visual {
+    font-family: 'Courier New', monospace;
+    font-size: 26px;
+    letter-spacing: -2px;
+    font-weight: 900;
+    color: #000000;
+    line-height: 1;
+    transform: scaleY(1.3);
+}
+
+.barcode-text {
+    display: block;
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #334155;
+    margin-top: 8px;
+}
+
+/* CARD FOOTER */
+.card-footer-strip {
+    background: #0f172a;
+    color: #94a3b8;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 16px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* ACTION BUTTONS */
+.id-action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.btn-action {
+    flex: 1;
+    height: 46px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    color: var(--text-dark);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: all 0.15s ease;
+}
+
+.btn-action:hover {
+    background: #f1f5f9;
+}
+
+.btn-action.primary {
+    background: var(--primary);
+    color: #ffffff;
+    border: none;
+}
+
+.btn-action.primary:hover {
+    background: #1e293b;
+}
+
+/* USAGE NOTE */
+.usage-note {
+    background: #f0fdfa;
+    border: 1px solid #ccfbf1;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #0f766e;
+    line-height: 1.5;
+}
+
+.usage-note strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    color: #115e59;
 }

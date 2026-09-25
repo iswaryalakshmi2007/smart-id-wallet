@@ -1,769 +1,145 @@
-const API_URL = "http://localhost:5000";
+// =====================================================
+// SMART ID WALLET - STUDENT PROFILE CONTROLLER
+// =====================================================
 
+const studentId = localStorage.getItem("studentId") || localStorage.getItem("userId");
 
-// ==========================================
-// GET LOGGED-IN STUDENT
-// ==========================================
+document.addEventListener("DOMContentLoaded", async () => {
+    if (!Auth.requireAuth("student")) return;
+    await loadProfileData();
+});
 
-let studentId =
-    localStorage.getItem("studentId");
-
-
-// ==========================================
-// CHECK LOGIN
-// ==========================================
-
-if (!studentId) {
-
-    window.location.href =
-        "index.html";
-
-}
-
-
-// ==========================================
-// LOAD PROFILE
-// ==========================================
-
-async function loadProfile() {
-
+async function loadProfileData() {
     try {
-
-        const response =
-            await fetch(
-                API_URL +
-                "/api/student/" +
-                studentId
-            );
-
-
-        const student =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            alert(
-                student.message ||
-                "Unable to load profile."
-            );
-
+        const res = await apiRequest(`/api/student/${studentId}`);
+        if (!res.ok || !res.data) {
+            showToast("Failed to load profile details", "error");
             return;
         }
 
-
-        // ==================================
-        // PROFILE HEADER
-        // ==================================
-
-        document.getElementById(
-            "studentName"
-        ).innerText =
-            student.name || "Student";
-
-
-        document.getElementById(
-            "studentId"
-        ).innerText =
-            student.student_id || studentId;
-
-
-        // ==================================
-        // EDIT INPUTS
-        // ==================================
-
-        const nameInput =
-            document.getElementById("name");
-
-        if (nameInput) {
-
-            nameInput.value =
-                student.name || "";
-
-        }
-
-
-        const studentIdInput =
-            document.getElementById(
-                "studentIdInput"
-            );
-
-        if (studentIdInput) {
-
-            studentIdInput.value =
-                student.student_id || studentId;
-
-        }
-
-
-        const departmentInput =
-            document.getElementById(
-                "departmentInput"
-            );
-
-        if (departmentInput) {
-
-            departmentInput.value =
-                student.department || "";
-
-        }
-
-
-        const academicYearInput =
-            document.getElementById(
-                "academicYearInput"
-            );
-
-        if (academicYearInput) {
-
-            academicYearInput.value =
-                student.academic_year || "";
-
-        }
-
-
-        const emailInput =
-            document.getElementById(
-                "emailInput"
-            );
-
-        if (emailInput) {
-
-            emailInput.value =
-                student.email || "";
-
-        }
-
-
-        // ==================================
-        // DETAILS
-        // ==================================
-
-        const detailName =
-            document.getElementById(
-                "detailName"
-            );
-
-        if (detailName) {
-
-            detailName.innerText =
-                student.name ||
-                "Not available";
-
-        }
-
-
-        const detailStudentId =
-            document.getElementById(
-                "detailStudentId"
-            );
-
-        if (detailStudentId) {
-
-            detailStudentId.innerText =
-                student.student_id ||
-                studentId;
-
-        }
-
-
-        const department =
-            document.getElementById(
-                "department"
-            );
-
-        if (department) {
-
-            department.innerText =
-                student.department ||
-                "Not available";
-
-        }
-
-
-        const academicYear =
-            document.getElementById(
-                "academicYear"
-            );
-
-        if (academicYear) {
-
-            academicYear.innerText =
-                student.academic_year ||
-                "Not available";
-
-        }
-
-
-        const email =
-            document.getElementById(
-                "email"
-            );
-
-        if (email) {
-
-            email.innerText =
-                student.email ||
-                "Not provided";
-
-        }
-
-
-        // ==================================
-        // LOAD WALLET
-        // ==================================
-
-        await loadWallet();
-
-
-    } catch (error) {
-
-        console.error(
-            "Profile loading error:",
-            error
-        );
-
-
-        alert(
-            "Unable to connect to server."
-        );
-
+        const student = res.data;
+        const nameEl = document.getElementById("profileName");
+        const idEl = document.getElementById("profileStudentId");
+        const deptEl = document.getElementById("profileDept");
+
+        if (nameEl) nameEl.innerText = student.name || "Student";
+        if (idEl) idEl.innerText = student.student_id || studentId;
+        if (deptEl) deptEl.innerText = student.department || "--";
+
+        // Pre-fill inputs
+        const nameInput = document.getElementById("nameInput");
+        const emailInput = document.getElementById("emailInput");
+        const deptInput = document.getElementById("deptInput");
+        const yearInput = document.getElementById("yearInput");
+        const roleInput = document.getElementById("roleInput");
+
+        if (nameInput) nameInput.value = student.name || "";
+        if (emailInput) emailInput.value = student.email || "";
+        if (deptInput) deptInput.value = student.department || "";
+        if (yearInput) yearInput.value = student.academic_year || "";
+        if (roleInput) roleInput.value = (student.role || Auth.getRole() || "Student").toUpperCase();
+
+    } catch (e) {
+        console.error("Error loading profile:", e);
     }
-
 }
 
+async function updateProfile() {
+    const nameInput = document.getElementById("nameInput");
+    const emailInput = document.getElementById("emailInput");
+    const deptInput = document.getElementById("deptInput");
+    const yearInput = document.getElementById("yearInput");
+    const btn = document.getElementById("saveProfileBtn");
 
-// ==========================================
-// LOAD WALLET
-// ==========================================
-
-async function loadWallet() {
-
-    try {
-
-        const response =
-            await fetch(
-                API_URL +
-                "/api/wallet/" +
-                studentId
-            );
-
-
-        const wallet =
-            await response.json();
-
-
-        if (response.ok) {
-
-            const balance =
-                document.getElementById(
-                    "balance"
-                );
-
-
-            if (balance) {
-
-                balance.innerText =
-                    "₹" +
-                    Number(wallet.balance)
-                        .toFixed(2);
-
-            }
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Wallet error:",
-            error
-        );
-
-    }
-
-}
-
-
-// ==========================================
-// SAVE PROFILE
-// ==========================================
-
-async function saveProfile() {
-
-    const name =
-        document.getElementById(
-            "name"
-        ).value.trim();
-
-
-    const newStudentId =
-        document.getElementById(
-            "studentIdInput"
-        ).value.trim().toUpperCase();
-
-
-    const department =
-        document.getElementById(
-            "departmentInput"
-        ).value.trim();
-
-
-    const academicYear =
-        document.getElementById(
-            "academicYearInput"
-        ).value.trim();
-
-
-    const email =
-        document.getElementById(
-            "emailInput"
-        ).value.trim();
-
-
-    // ==================================
-    // VALIDATION
-    // ==================================
+    const name = nameInput ? nameInput.value.trim() : "";
+    const email = emailInput ? emailInput.value.trim() : "";
 
     if (!name) {
-
-        alert(
-            "Please enter student name."
-        );
-
+        showToast("Name cannot be empty", "error");
         return;
     }
 
-
-    if (!newStudentId) {
-
-        alert(
-            "Please enter student ID."
-        );
-
-        return;
-    }
-
-
-    if (!department) {
-
-        alert(
-            "Please enter department."
-        );
-
-        return;
-    }
-
-
-    if (!academicYear) {
-
-        alert(
-            "Please enter academic year."
-        );
-
-        return;
-    }
-
-
-    // ==================================
-    // SAVE
-    // ==================================
+    if (btn) btn.disabled = true;
 
     try {
+        const res = await apiRequest("/api/student/update", {
+            method: "PUT",
+            body: JSON.stringify({
+                oldStudentId: studentId,
+                studentId: studentId,
+                name: name,
+                email: email,
+                department: deptInput ? deptInput.value : "",
+                academicYear: yearInput ? yearInput.value : ""
+            })
+        });
 
-        const response =
-            await fetch(
-                API_URL +
-                "/api/student/update",
-                {
-
-                    method: "PUT",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json"
-
-                    },
-
-                    body: JSON.stringify({
-
-                        oldStudentId:
-                            studentId,
-
-                        studentId:
-                            newStudentId,
-
-                        name:
-                            name,
-
-                        department:
-                            department,
-
-                        academicYear:
-                            academicYear,
-
-                        email:
-                            email
-
-                    })
-
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            alert(
-                result.message ||
-                "Unable to save profile."
-            );
-
-            return;
+        if (res.ok && res.data.success) {
+            showToast("Profile updated successfully!", "success");
+            localStorage.setItem("userName", name);
+            const nameEl = document.getElementById("profileName");
+            if (nameEl) nameEl.innerText = name;
+        } else {
+            showToast(res.data.message || "Failed to update profile", "error");
         }
-
-
-        // ==================================
-        // UPDATE LOGIN SESSION
-        // ==================================
-
-        studentId =
-            result.studentId;
-
-
-        localStorage.setItem(
-            "studentId",
-            result.studentId
-        );
-
-
-        alert(
-            "Profile updated successfully!"
-        );
-
-
-        // Reload profile
-
-        loadProfile();
-
-
-    } catch (error) {
-
-        console.error(
-            "Save profile error:",
-            error
-        );
-
-
-        alert(
-            "Unable to connect to server."
-        );
-
+    } catch (e) {
+        console.error("Profile update error:", e);
+        showToast("Error updating profile", "error");
+    } finally {
+        if (btn) btn.disabled = false;
     }
-
 }
 
+async function updatePassword() {
+    const currentPass = document.getElementById("currentPassword");
+    const newPass = document.getElementById("newPassword");
+    const confirmPass = document.getElementById("confirmPassword");
+    const btn = document.getElementById("changePassBtn");
 
-// ==========================================
-// CHANGE PASSWORD
-// ==========================================
+    const cVal = currentPass ? currentPass.value.trim() : "";
+    const nVal = newPass ? newPass.value.trim() : "";
+    const confVal = confirmPass ? confirmPass.value.trim() : "";
 
-async function changePassword() {
-
-    // ==================================
-    // CURRENT PASSWORD
-    // ==================================
-
-    const currentPassword =
-        prompt(
-            "Enter your current password:"
-        );
-
-
-    if (currentPassword === null) {
-
+    if (!cVal || !nVal || !confVal) {
+        showToast("Please fill all password fields", "error");
         return;
-
     }
 
-
-    if (
-        currentPassword.trim() === ""
-    ) {
-
-        alert(
-            "Please enter your current password."
-        );
-
+    if (nVal.length < 6) {
+        showToast("New password must be at least 6 characters", "error");
         return;
-
     }
 
-
-    // ==================================
-    // NEW PASSWORD
-    // ==================================
-
-    const newPassword =
-        prompt(
-            "Enter your new password:\n\n" +
-            "Minimum 6 characters."
-        );
-
-
-    if (newPassword === null) {
-
+    if (nVal !== confVal) {
+        showToast("New passwords do not match", "error");
         return;
-
     }
 
-
-    if (
-        newPassword.trim() === ""
-    ) {
-
-        alert(
-            "Please enter a new password."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        newPassword.length < 6
-    ) {
-
-        alert(
-            "New password must be at least 6 characters."
-        );
-
-        return;
-
-    }
-
-
-    // ==================================
-    // CONFIRM PASSWORD
-    // ==================================
-
-    const confirmPassword =
-        prompt(
-            "Confirm your new password:"
-        );
-
-
-    if (confirmPassword === null) {
-
-        return;
-
-    }
-
-
-    if (
-        confirmPassword.trim() === ""
-    ) {
-
-        alert(
-            "Please confirm your new password."
-        );
-
-        return;
-
-    }
-
-
-    // ==================================
-    // PASSWORD MATCH
-    // ==================================
-
-    if (
-        newPassword !==
-        confirmPassword
-    ) {
-
-        alert(
-            "New passwords do not match."
-        );
-
-        return;
-
-    }
-
-
-    // ==================================
-    // SAME PASSWORD
-    // ==================================
-
-    if (
-        currentPassword ===
-        newPassword
-    ) {
-
-        alert(
-            "New password must be different from current password."
-        );
-
-        return;
-
-    }
-
-
-    // ==================================
-    // FINAL CONFIRMATION
-    // ==================================
-
-    const confirmed =
-        confirm(
-            "Are you sure you want to change your password?"
-        );
-
-
-    if (!confirmed) {
-
-        return;
-
-    }
-
-
-    // ==================================
-    // SEND TO BACKEND
-    // ==================================
+    if (btn) btn.disabled = true;
 
     try {
+        const res = await apiRequest("/api/student/change-password", {
+            method: "PUT",
+            body: JSON.stringify({
+                studentId: studentId,
+                currentPassword: cVal,
+                newPassword: nVal,
+                confirmPassword: confVal
+            })
+        });
 
-        const response =
-            await fetch(
-                API_URL +
-                "/api/student/change-password",
-                {
-
-                    method: "PUT",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json"
-
-                    },
-
-                    body: JSON.stringify({
-
-                        studentId:
-                            studentId,
-
-                        currentPassword:
-                            currentPassword,
-
-                        newPassword:
-                            newPassword,
-
-                        confirmPassword:
-                            confirmPassword
-
-                    })
-
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        // ==================================
-        // ERROR
-        // ==================================
-
-        if (!response.ok) {
-
-            alert(
-                result.message ||
-                "Unable to change password."
-            );
-
-            return;
-
+        if (res.ok && res.data.success) {
+            showToast("Password changed successfully!", "success");
+            if (currentPass) currentPass.value = "";
+            if (newPass) newPass.value = "";
+            if (confirmPass) confirmPass.value = "";
+        } else {
+            showToast(res.data.message || "Incorrect current password", "error");
         }
-
-
-        // ==================================
-        // SUCCESS
-        // ==================================
-
-        alert(
-            "✅ Password changed successfully!\n\n" +
-            "Your new password will be used for your next login."
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Change password error:",
-            error
-        );
-
-
-        alert(
-            "Unable to connect to server."
-        );
-
+    } catch (e) {
+        console.error("Password update error:", e);
+        showToast("Error updating password", "error");
+    } finally {
+        if (btn) btn.disabled = false;
     }
-
 }
-
-
-// ==========================================
-// LOGOUT
-// ==========================================
-
-function logout() {
-
-    const confirmLogout =
-        confirm(
-            "Are you sure you want to logout?"
-        );
-
-
-    if (!confirmLogout) {
-
-        return;
-    }
-
-
-    localStorage.removeItem(
-        "studentId"
-    );
-
-
-    window.location.href =
-        "index.html";
-
-}
-
-
-// ==========================================
-// BACK
-// ==========================================
-
-function goBack() {
-
-    window.location.href =
-        "dashboard.html";
-
-}
-
-
-// ==========================================
-// PAGE LOAD
-// ==========================================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    loadProfile
-);
